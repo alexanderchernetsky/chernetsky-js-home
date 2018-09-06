@@ -369,3 +369,87 @@ describe('object math tests', () => {
     expect(Math.tan(1)).toBeCloseTo(1.56);
   });
 });
+
+let globalText = 'Why do people covet the silly pieces of green cotton paper in their wallets?';
+beforeEach(() => {
+  globalText = 'Why do people covet the silly pieces of green cotton paper in their wallets?';
+});
+
+describe('string class tests', () => {
+  it('foot string length', () => {
+    expect(globalStr.length).toBe(4);
+  });
+
+  it('foot string length', () => {
+    expect(globalStr.length).toBe(4);
+  });
+
+  it('foot string charAt 3', () => {
+    expect(globalStr.charAt(3)).toBe('t');
+  });
+
+  it('foot string [3]', () => {
+    expect(globalStr[3]).toBe('t');
+  });
+
+  it('string substr', () => {
+    expect(globalText.substr(15)).toMatch(/wallets?/);
+  });
+
+  it('string substr', () => {
+    expect(globalText.substr(15, 30)).not.toMatch(/wallets?/);
+  });
+
+  it('string slice', () => {
+    expect(globalText.slice(0, 3)).toBe('Why');
+  });
+
+  it('string split', () => {
+    expect(globalText.split(' ')).toContain('people');
+  });
+
+  it('string toLowerCase', () => {
+    const UPSTR = 'HELLO I\'M ROBOT!';
+    expect(UPSTR.toLowerCase()).toBe('hello i\'m robot!');
+  });
+
+  it('string toUpperCase', () => {
+    expect(globalStr.toUpperCase()).toBe('FOOT');
+  });
+
+  it('string indexOf', () => {
+    expect(globalText.indexOf('people')).not.toBe(-1);
+  });
+
+  it('string indexOf from defined position', () => {
+    expect(globalText.indexOf('people, 20')).toBe(-1);
+  });
+
+  it('string lastIndexOf', () => {
+    expect(globalText.lastIndexOf('people')).not.toBe(-1);
+  });
+
+  it('string lastIndexOf from defined position', () => {
+    expect(globalText.lastIndexOf('people', 20)).not.toBe(-1);
+  });
+
+  it('string replace', () => {
+    expect(globalText.replace('people', 'women')).toContain('women');
+  });
+
+  it('string trim', () => {
+    globalStr = '  green\n ';
+    expect(globalStr.trim()).toBe('green');
+  });
+});
+
+let globalArray = ['Richard', 'Erlich', 'Gilfoyle'];
+beforeEach(() => {
+  globalArray = ['Richard', 'Erlich', 'Gilfoyle'];
+});
+
+describe('array operations tests', () => {
+  it('foot && ball', () => {
+    expect(globalStr && globalStr2).toBe('ball');
+  });
+});
