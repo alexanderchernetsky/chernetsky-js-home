@@ -314,3 +314,58 @@ describe('conversion of types tests', () => {
     expect(Boolean(0)).toBeFalsy();
   });
 });
+
+describe('object math tests', () => {
+  it('pi', () => {
+    expect(Math.PI).toBeCloseTo(3.14);
+  });
+
+  it('abs of -11', () => {
+    expect(Math.abs(-11)).toBe(11);
+  });
+
+  it('max of 26 and 11', () => {
+    expect(Math.max(globalNumb, globalNumb2)).toBe(26);
+  });
+
+  it('min of 26 and 11', () => {
+    expect(Math.min(globalNumb, globalNumb2)).toBe(11);
+  });
+
+  it('round 3.5', () => {
+    expect(Math.round(3.5)).toBe(4);
+  });
+
+  it('ceil 3.1', () => {
+    expect(Math.ceil(3.1)).toBe(4);
+  });
+
+  it('floor 3.9', () => {
+    expect(Math.floor(3.9)).toBe(3);
+  });
+
+  it('sqrt 10', () => {
+    expect(Math.sqrt(10)).toBeCloseTo(3.16);
+  });
+
+  it('sqrt -10', () => {
+    expect(Math.sqrt(-10)).toBe(NaN);
+  });
+
+  it('random', () => {
+    globalNumb = Math.random();
+    expect((globalNumb < 1) && (globalNumb > 0)).toBeTruthy();
+  });
+
+  it('sin', () => {
+    expect(Math.sin(Math.PI / 2)).toBe(1);
+  });
+
+  it('cos', () => {
+    expect(Math.cos(Math.PI)).toBe(-1);
+  });
+
+  it('tan', () => {
+    expect(Math.tan(1)).toBeCloseTo(1.56);
+  });
+});
