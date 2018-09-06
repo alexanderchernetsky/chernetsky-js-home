@@ -11,22 +11,6 @@ describe('type tests', () => {
     expect(3e5).toBe(300000);
   });
 
-  it('transformation from string to number', () => {
-    expect(Number('5')).toBe(5);
-  });
-
-  it('22kg doesnt transform from string to number', () => {
-    expect(Number('22kg')).toBe(NaN);
-  });
-
-  it('33 is a finite number', () => {
-    expect(Number.isFinite(33)).toBeTruthy();
-  });
-
-  it('5/0 isnt a finite number', () => {
-    expect(Number.isFinite(5 / 0)).toBeFalsy();
-  });
-
   it('text is a string', () => {
     expect(typeof 'some text').toBe('string');
   });
@@ -86,12 +70,12 @@ describe('type tests', () => {
   });
 });
 
-let GlobalNumb = 26;
-let GlobalNumb2 = 11;
+let globalNumb = 26;
+let globalNumb2 = 11;
 
 beforeEach(() => {
-  GlobalNumb = 26;
-  GlobalNumb2 = 11;
+  globalNumb = 26;
+  globalNumb2 = 11;
 });
 
 describe('arithmetic operations tests', () => {
@@ -129,32 +113,32 @@ describe('arithmetic operations tests', () => {
   });
 
   it('--26', () => {
-    expect(--GlobalNumb).toBe(25);
+    expect(--globalNumb).toBe(25);
   });
 
   it('++26', () => {
-    expect(++GlobalNumb).toBe(27);
+    expect(++globalNumb).toBe(27);
   });
 
   it('26++', () => {
-    expect(GlobalNumb++).toBe(26);
+    expect(globalNumb++).toBe(26);
   });
 
   it('26--', () => {
-    expect(GlobalNumb--).toBe(26);
+    expect(globalNumb--).toBe(26);
   });
 
   it('26 += 1', () => {
-    expect(GlobalNumb += 1).toBe(27);
+    expect(globalNumb += 1).toBe(27);
   });
   it('26 -= 1', () => {
-    expect(GlobalNumb -= 1).toBe(25);
+    expect(globalNumb -= 1).toBe(25);
   });
   it('26 *= 2', () => {
-    expect(GlobalNumb *= 2).toBe(52);
+    expect(globalNumb *= 2).toBe(52);
   });
   it('26 /= 2', () => {
-    expect(GlobalNumb /= 2).toBe(13);
+    expect(globalNumb /= 2).toBe(13);
   });
 });
 
@@ -175,7 +159,7 @@ describe('string operations tests', () => {
 
 describe('comparison operations tests', () => {
   it('11<26', () => {
-    expect(GlobalNumb2 < GlobalNumb).toBeTruthy();
+    expect(globalNumb2 < globalNumb).toBeTruthy();
   });
 
   it('undefined comparison with 0', () => {
@@ -183,7 +167,7 @@ describe('comparison operations tests', () => {
   });
 
   it('26>11', () => {
-    expect(GlobalNumb > GlobalNumb2).toBeTruthy();
+    expect(globalNumb > globalNumb2).toBeTruthy();
   });
 
   it('null comparison with 0', () => {
@@ -195,36 +179,138 @@ describe('comparison operations tests', () => {
   });
 
   it('26<=26', () => {
-    expect(GlobalNumb <= 26).toBeTruthy();
+    expect(globalNumb <= 26).toBeTruthy();
   });
 
   it('number26==string26', () => {
-    expect(GlobalNumb == '26').toBeTruthy();
+    expect(globalNumb == '26').toBeTruthy();
   });
 
   it('number26===string26', () => {
-    expect(GlobalNumb === '26').toBeFalsy();
+    expect(globalNumb === '26').toBeFalsy();
   });
 
   it('number26!==string26', () => {
-    expect(GlobalNumb !== '26').toBeTruthy();
+    expect(globalNumb !== '26').toBeTruthy();
   });
 
   it('number26!=string26', () => {
-    expect(GlobalNumb != '26').toBeFalsy();
+    expect(globalNumb != '26').toBeFalsy();
   });
 });
 
-let GlobalStr = 'foot';
-let GlobalStr2 = 'ball';
+let globalStr = 'foot';
+let globalStr2 = 'ball';
 
 beforeEach(() => {
-  GlobalStr = 'foot';
-  GlobalStr2 = 'ball';
+  globalStr = 'foot';
+  globalStr2 = 'ball';
 });
 
 describe('boolean operations tests', () => {
-  it('&&', () => {
-    expect(GlobalStr && GlobalStr2).toBe('ball');
+  it('foot && ball', () => {
+    expect(globalStr && globalStr2).toBe('ball');
+  });
+
+  it('foot && null', () => {
+    expect(globalStr && null).toBeNull();
+  });
+
+  it('foot || ball', () => {
+    expect(globalStr || globalStr2).toBe('foot');
+  });
+
+  it('foot || null', () => {
+    expect(globalStr || null).toBe('foot');
+  });
+
+  it('!(26>11)', () => {
+    expect(!(globalNumb > globalNumb2)).toBeFalsy();
+  });
+});
+
+describe('conversion of types tests', () => {
+  it('parseInt string -2dollars', () => {
+    expect(parseInt('-2dollars')).toBe(-2);
+  });
+
+  it('parseInt string dollars2', () => {
+    expect(parseInt('dollars2')).toBe(NaN);
+  });
+
+  it('parseFloat string dollars2', () => {
+    expect(parseFloat('dollars2')).toBe(NaN);
+  });
+
+  it('parseFloat string -2.5dollars', () => {
+    expect(parseFloat('-2.5dollars')).toBe(-2.5);
+  });
+
+  it('transformation from string to number', () => {
+    expect(Number('5')).toBe(5);
+  });
+
+  it('22kg doesnt transform from string to number', () => {
+    expect(Number('22kg')).toBe(NaN);
+  });
+
+  it('string26 - number1', () => {
+    expect('26' - 1).toBe(25);
+  });
+
+  it('26 ist NaN', () => {
+    expect(isNaN(globalNumb)).toBeFalsy();
+  });
+
+  it('foot is NaN', () => {
+    expect(isNaN(globalStr)).toBeTruthy();
+  });
+
+  it('NaN is NaN', () => {
+    expect(isNaN(NaN)).toBeTruthy();
+  });
+
+  it('26 is a finite number', () => {
+    expect(Number.isFinite(globalNumb)).toBeTruthy();
+  });
+
+  it('5/0 isnt a finite number', () => {
+    expect(Number.isFinite(5 / 0)).toBeFalsy();
+  });
+
+  it('string 22kg isnt a finite number', () => {
+    expect(Number.isFinite('22kg')).toBeFalsy();
+  });
+
+  it('conversion of number to string', () => {
+    expect(String(33)).toBe('33');
+  });
+
+  it('conversion of number to string', () => {
+    expect(globalNumb.toString()).toBe('26');
+  });
+
+  it('conversion of number to string', () => {
+    expect(globalNumb.toString()).toBe('26');
+  });
+
+  it('concatenation of number2 and string2', () => {
+    expect(2 + '2').toBe('22');
+  });
+
+  it('number conversation to boolean', () => {
+    expect(Boolean(22)).toBeTruthy();
+  });
+
+  it('null conversation to boolean', () => {
+    expect(Boolean(null)).toBeFalsy();
+  });
+
+  it('NaN conversation to boolean', () => {
+    expect(Boolean(NaN)).toBeFalsy();
+  });
+
+  it('0 conversation to boolean', () => {
+    expect(Boolean(0)).toBeFalsy();
   });
 });
