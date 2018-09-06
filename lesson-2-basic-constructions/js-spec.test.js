@@ -82,8 +82,16 @@ describe('type tests', () => {
   });
 
   it('undefined not equal 0', () => {
-    expect(undefined == 0).toBeFalsy();
+    expect(undefined === 0).toBeFalsy();
   });
+});
+
+let GlobalNumb = 26;
+let GlobalNumb2 = 11;
+
+beforeEach(() => {
+  GlobalNumb = 26;
+  GlobalNumb2 = 11;
 });
 
 describe('arithmetic operations tests', () => {
@@ -120,38 +128,103 @@ describe('arithmetic operations tests', () => {
     expect(-AGE).toBe(-Infinity);
   });
 
-  let GLOBALNUMB = 26;
-
-  beforeEach(() => {
-    GLOBALNUMB = 26;
-  });
-
   it('--26', () => {
-    expect(--GLOBALNUMB).toBe(25);
+    expect(--GlobalNumb).toBe(25);
   });
 
   it('++26', () => {
-    expect(++GLOBALNUMB).toBe(27);
+    expect(++GlobalNumb).toBe(27);
   });
 
   it('26++', () => {
-    expect(GLOBALNUMB++).toBe(26);
+    expect(GlobalNumb++).toBe(26);
   });
 
   it('26--', () => {
-    expect(GLOBALNUMB--).toBe(26);
+    expect(GlobalNumb--).toBe(26);
   });
 
   it('26 += 1', () => {
-    expect(GLOBALNUMB += 1).toBe(27);
+    expect(GlobalNumb += 1).toBe(27);
   });
   it('26 -= 1', () => {
-    expect(GLOBALNUMB -= 1).toBe(25);
+    expect(GlobalNumb -= 1).toBe(25);
   });
   it('26 *= 2', () => {
-    expect(GLOBALNUMB *= 2).toBe(52);
+    expect(GlobalNumb *= 2).toBe(52);
   });
   it('26 /= 2', () => {
-    expect(GLOBALNUMB /= 2).toBe(13);
+    expect(GlobalNumb /= 2).toBe(13);
+  });
+});
+
+describe('string operations tests', () => {
+  it('gift+shop', () => {
+    expect('gift' + 'shop').toBe('giftshop');
+  });
+
+  it('1+1 equal 11', () => {
+    expect('1' + 1).toBe('11');
+  });
+
+  it('gift += shop', () => {
+    let someWord = 'gift';
+    expect(someWord += 'shop').toBe('giftshop');
+  });
+});
+
+describe('comparison operations tests', () => {
+  it('11<26', () => {
+    expect(GlobalNumb2 < GlobalNumb).toBeTruthy();
+  });
+
+  it('undefined comparison with 0', () => {
+    expect(undefined < 0).toBeFalsy();
+  });
+
+  it('26>11', () => {
+    expect(GlobalNumb > GlobalNumb2).toBeTruthy();
+  });
+
+  it('null comparison with 0', () => {
+    expect(null > 0).toBeFalsy();
+  });
+
+  it('null<=0', () => {
+    expect(null <= 0).toBeTruthy();
+  });
+
+  it('26<=26', () => {
+    expect(GlobalNumb <= 26).toBeTruthy();
+  });
+
+  it('number26==string26', () => {
+    expect(GlobalNumb == '26').toBeTruthy();
+  });
+
+  it('number26===string26', () => {
+    expect(GlobalNumb === '26').toBeFalsy();
+  });
+
+  it('number26!==string26', () => {
+    expect(GlobalNumb !== '26').toBeTruthy();
+  });
+
+  it('number26!=string26', () => {
+    expect(GlobalNumb != '26').toBeFalsy();
+  });
+});
+
+let GlobalStr = 'foot';
+let GlobalStr2 = 'ball';
+
+beforeEach(() => {
+  GlobalStr = 'foot';
+  GlobalStr2 = 'ball';
+});
+
+describe('boolean operations tests', () => {
+  it('&&', () => {
+    expect(GlobalStr && GlobalStr2).toBe('ball');
   });
 });
