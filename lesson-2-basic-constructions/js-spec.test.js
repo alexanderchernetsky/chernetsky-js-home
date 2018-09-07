@@ -444,12 +444,62 @@ describe('string class tests', () => {
 });
 
 let globalArray = ['Richard', 'Erlich', 'Gilfoyle'];
+let globalArray2 = ['Dinesh'];
+let globalArray3 = ['Richard', 'Erlich', 'Gilfoyle', 'Jared Dunn', 'Gavin Belson'];
+
 beforeEach(() => {
   globalArray = ['Richard', 'Erlich', 'Gilfoyle'];
+  globalArray2 = ['Dinesh'];
+  globalArray3 = ['Richard', 'Erlich', 'Gilfoyle', 'Jared Dunn', 'Gavin Belson'];
 });
 
 describe('array operations tests', () => {
-  it('foot && ball', () => {
-    expect(globalStr && globalStr2).toBe('ball');
+  it('array length', () => {
+    expect(globalArray.length).toBe(3);
+  });
+
+  it('array A concat array B', () => {
+    const SUMARRAY = ['Richard', 'Erlich', 'Gilfoyle', 'Dinesh'];
+    expect(globalArray.concat(globalArray2)).toEqual(SUMARRAY);
+  });
+
+  it('array join', () => {
+    expect(globalArray.join('/')).toEqual('Richard/Erlich/Gilfoyle');
+  });
+
+  it('push method', () => {
+    expect(globalArray.push('Dinesh')).toBe(4);
+  });
+
+  it('pop method', () => {
+    expect(globalArray.pop()).toBe('Gilfoyle');
+  });
+
+  it('unshift method', () => {
+    expect(globalArray.unshift('Big Head')).toBe(4);
+  });
+
+  it('shift method', () => {
+    expect(globalArray.shift()).toBe('Richard');
+  });
+
+  it('slice method', () => {
+    expect(globalArray3.slice(3)).toEqual(['Jared Dunn', 'Gavin Belson']);
+  });
+
+  it('slice method', () => {
+    expect(globalArray3.slice(1, -1)).toEqual(['Erlich', 'Gilfoyle', 'Jared Dunn']);
+  });
+
+  it('splice method', () => {
+    expect(globalArray3.splice(1, 3, 'Dinesh')).toEqual(['Erlich', 'Gilfoyle', 'Jared Dunn']);
+  });
+
+  it('reverse method', () => {
+    expect(globalArray.reverse()).toEqual(['Gilfoyle', 'Erlich', 'Richard']);
+  });
+
+  it('sort method', () => {
+    expect(globalArray3.sort()).toEqual(['Erlich', 'Gavin Belson', 'Gilfoyle', 'Jared Dunn', 'Richard']);
   });
 });
