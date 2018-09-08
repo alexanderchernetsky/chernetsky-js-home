@@ -62,7 +62,38 @@ do  {
   }
 } while (userAnswerValidation(lastName) !== 'validation success');
 
-var fullYears = parseInt(prompt('Сколько вам лет:', ''), 10);
+var fullYears = prompt('Сколько вам лет:', '26');
+
+function userAgeValidation(string) {
+  var prohibitedSymbols = [' '];
+  if ((string === null) || (string === '')) {
+    return 'nothing entered';
+  }
+  for (var i = 0; i <= string.length; i++) {
+    var userSymbol = string.charAt(i);
+    if (prohibitedSymbols.indexOf(userSymbol) !== -1) {
+      return 'validation failed';
+    }
+    if (!isFinite(string) ) {
+      return 'validation failed';
+    }
+  }
+  return 'validation success';
+}
+
+do {
+  if (userAgeValidation(fullYears) === 'nothing entered') {
+    do {
+      fullYears = prompt('Вы ничего не ввели! Пожалуйста введите ваш возраст:', '26');
+    } while (userAgeValidation(fullYears) === 'nothing entered');
+  }
+
+  if (userAgeValidation(fullYears) === 'validation failed') {
+    do {
+      fullYears = prompt('Вы ввели возраст неверно! Возраст не может содержать буквы и пробелы! Пожалуйста введите ваш возраст:', '26');
+    } while (userAgeValidation(fullYears) === 'validation failed');
+  }
+} while (userAgeValidation(fullYears) !== 'validation success');
 
 
 var gender = confirm('Ваш пол - мужской?');
@@ -76,7 +107,7 @@ if (gender && (fullYears >= 63)) {
 
 var fullName = firstName + ' ' + secondName + ' ' + lastName;
 var ageInDays = Math.floor(fullYears * 365.2425);
-var futureYears = fullYears + 5;
+var futureYears = Number(fullYears) + 5;
 
 gender = (gender) ? 'мужской' : 'женский';
 pension = (pension) ? 'да' : 'нет';
@@ -89,4 +120,3 @@ var finalMessage = 'ваше ФИО: ' + fullName + '\n' +
     'вы на пенсии: ' + pension;
 
 alert(finalMessage);
-*/
