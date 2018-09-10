@@ -148,7 +148,7 @@ describe('string operations tests', () => {
   });
 
   it('1+1 equal 11', () => {
-    expect('1' + 1).toBe('11');
+    expect(`1${1}`).toBe('11');
   });
 
   it('gift += shop', () => {
@@ -291,7 +291,8 @@ describe('conversion of types tests', () => {
   });
 
   it('conversion of number to string', () => {
-    expect(globalNumb.toString()).toBe('26');
+    const NANVAR = NaN;
+    expect(NANVAR.toString()).toBe('NaN');
   });
 
   it('concatenation of number2 and string2', () => {
@@ -300,6 +301,10 @@ describe('conversion of types tests', () => {
 
   it('number conversation to boolean', () => {
     expect(Boolean(22)).toBeTruthy();
+  });
+
+  it('gap conversation to boolean', () => {
+    expect(Boolean(' ')).toBeTruthy();
   });
 
   it('null conversation to boolean', () => {
@@ -312,6 +317,14 @@ describe('conversion of types tests', () => {
 
   it('0 conversation to boolean', () => {
     expect(Boolean(0)).toBeFalsy();
+  });
+
+  it('undefined conversation to boolean', () => {
+    expect(Boolean(undefined)).toBeFalsy();
+  });
+
+  it('empty string conversation to boolean', () => {
+    expect(Boolean('')).toBeFalsy();
   });
 });
 
@@ -336,12 +349,20 @@ describe('object math tests', () => {
     expect(Math.round(3.5)).toBe(4);
   });
 
+  it('round 3.5', () => {
+    expect(Math.round(Infinity)).toBe(Infinity);
+  });
+
   it('ceil 3.1', () => {
     expect(Math.ceil(3.1)).toBe(4);
   });
 
   it('floor 3.9', () => {
     expect(Math.floor(3.9)).toBe(3);
+  });
+
+  it('floor of infinity', () => {
+    expect(Math.floor(Infinity)).toBe(Infinity);
   });
 
   it('sqrt 10', () => {
@@ -357,20 +378,38 @@ describe('object math tests', () => {
     expect((globalNumb < 1) && (globalNumb > 0)).toBeTruthy();
   });
 
-  it('sin', () => {
+  it('sin of 90deg', () => {
     expect(Math.sin(Math.PI / 2)).toBe(1);
   });
 
-  it('cos', () => {
+  it('sin of 180deg', () => {
+    expect(Math.sin(Math.PI)).toBeCloseTo(0);
+  });
+
+  it('cos of 180deg', () => {
     expect(Math.cos(Math.PI)).toBe(-1);
   });
 
-  it('tan', () => {
+  it('cos of 90deg', () => {
+    expect(Math.cos(Math.PI / 2)).toBeCloseTo(0);
+  });
+
+  it('tg of 1', () => {
     expect(Math.tan(1)).toBeCloseTo(1.56);
+  });
+
+  it('tg of 0', () => {
+    expect(Math.tan(0)).toBe(0);
+  });
+
+  it('tg of 90 deg?!?', () => {
+    expect(Math.tan(Math.PI / 2)).toBe(16331239353195370);
   });
 });
 
 let globalText = 'Why do people covet the silly pieces of green cotton paper in their wallets?';
+const SOMENUMB = 1234;
+
 beforeEach(() => {
   globalText = 'Why do people covet the silly pieces of green cotton paper in their wallets?';
 });
@@ -380,8 +419,8 @@ describe('string class tests', () => {
     expect(globalStr.length).toBe(4);
   });
 
-  it('foot string length', () => {
-    expect(globalStr.length).toBe(4);
+  it('use string length with number', () => {
+    expect(SOMENUMB.length).toBeUndefined();
   });
 
   it('foot string charAt 3', () => {
@@ -390,6 +429,10 @@ describe('string class tests', () => {
 
   it('foot string [3]', () => {
     expect(globalStr[3]).toBe('t');
+  });
+
+  it('foot string [100]', () => {
+    expect(globalStr[100]).toBeUndefined();
   });
 
   it('string substr', () => {
@@ -437,6 +480,10 @@ describe('string class tests', () => {
     expect(globalText.replace('people', 'women')).toContain('women');
   });
 
+  it('non-existant string replace', () => {
+    expect(globalText.replace('abandon', 'women')).not.toContain('women');
+  });
+
   it('string trim', () => {
     globalStr = '  green\n ';
     expect(globalStr.trim()).toBe('green');
@@ -446,16 +493,22 @@ describe('string class tests', () => {
 let globalArray = ['Richard', 'Erlich', 'Gilfoyle'];
 let globalArray2 = ['Dinesh'];
 let globalArray3 = ['Richard', 'Erlich', 'Gilfoyle', 'Jared Dunn', 'Gavin Belson'];
+let emptyArray = [];
 
 beforeEach(() => {
   globalArray = ['Richard', 'Erlich', 'Gilfoyle'];
   globalArray2 = ['Dinesh'];
   globalArray3 = ['Richard', 'Erlich', 'Gilfoyle', 'Jared Dunn', 'Gavin Belson'];
+  emptyArray = [];
 });
 
 describe('array operations tests', () => {
   it('array length', () => {
     expect(globalArray.length).toBe(3);
+  });
+
+  it('empty array length', () => {
+    expect(emptyArray.length).toBe(0);
   });
 
   it('array A concat array B', () => {
