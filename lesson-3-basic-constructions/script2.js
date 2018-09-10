@@ -64,17 +64,20 @@ do  {
 
 var fullYears = prompt('Сколько вам лет:', '26');
 
-function userAgeValidation(string) {
-  var prohibitedSymbols = [' '];
-  if ((string === null) || (string === '')) {
+function userAgeValidation(age) {
+  var prohibitedSymbols = [' ', '-', '/', '#', '+'];
+  if ((age === null) || (age === '')) {
     return 'nothing entered';
   }
-  for (var i = 0; i <= string.length; i++) {
-    var userSymbol = string.charAt(i);
+  if ((age <= 0) || (age > 130)) {
+    return 'user lies';
+  }
+  for (var i = 0; i <= age.length; i++) {
+    var userSymbol = age.charAt(i);
     if (prohibitedSymbols.indexOf(userSymbol) !== -1) {
       return 'validation failed';
     }
-    if (!isFinite(string) ) {
+    if (!isFinite(age) ) {
       return 'validation failed';
     }
   }
@@ -88,9 +91,15 @@ do {
     } while (userAgeValidation(fullYears) === 'nothing entered');
   }
 
+  if (userAgeValidation(fullYears) === 'user lies') {
+    do {
+      fullYears = prompt('Вы хотите меня надурить!?! Пожалуйста введите ваш настоящий возраст:', '26');
+    } while (userAgeValidation(fullYears) === 'user lies');
+  }
+
   if (userAgeValidation(fullYears) === 'validation failed') {
     do {
-      fullYears = prompt('Вы ввели возраст неверно! Возраст не может содержать буквы и пробелы! Пожалуйста введите ваш возраст:', '26');
+      fullYears = prompt('Вы ввели возраст неверно! Возраст должен быть цифрой без пробелов и каких-либо знаков! Пожалуйста введите ваш возраст:', '26');
     } while (userAgeValidation(fullYears) === 'validation failed');
   }
 } while (userAgeValidation(fullYears) !== 'validation success');
