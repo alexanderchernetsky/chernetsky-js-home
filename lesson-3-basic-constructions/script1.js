@@ -6,7 +6,7 @@ if (userString === null) {
   alert('Вы ничего не ввели!');
 } else {
   var userStringLowCase = userString.toLowerCase();
-  russianVowelCount(userStringLowCase);
+  console.log(russianVowelCount(userStringLowCase));
 }
 
 function russianVowelCount(string) {
@@ -18,6 +18,5 @@ function russianVowelCount(string) {
       userVowelNumber += 1;
     }
   }
-  console.log(userVowelNumber);
   return userVowelNumber;
 }
