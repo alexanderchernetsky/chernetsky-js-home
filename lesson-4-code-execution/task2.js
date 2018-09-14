@@ -1,11 +1,5 @@
 'use strict';
 
-var image = {
-  width: 100,
-  height: 400,
-  title: 'Cool image'
-};
-
 function multiplyNumeric(obj) {
   function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -17,7 +11,5 @@ function multiplyNumeric(obj) {
   }
   return obj;
 }
-
-console.log(multiplyNumeric(image));
 
 module.exports = multiplyNumeric;
