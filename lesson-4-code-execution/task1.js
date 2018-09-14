@@ -7,14 +7,16 @@ var tasksCompleted = {
   'Anton': 99
 };
 
-var maxTasks = 0;
-var maxName = '';
-
-for (var name in tasksCompleted) {
-  if (maxTasks < tasksCompleted[name]) {
-    maxTasks = tasksCompleted[name];
-    maxName = name;
+function defineTheBestEmployee(obj) {
+  var maxTasks = 0;
+  var maxName = '';
+  for (var name in obj) {
+    if (maxTasks < obj[name]) {
+      maxTasks = obj[name];
+      maxName = name;
+    }
   }
+  return maxName;
 }
 
-module.exports = maxName;
+module.exports = defineTheBestEmployee;
