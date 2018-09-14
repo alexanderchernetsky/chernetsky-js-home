@@ -1,12 +1,12 @@
 'use strict';
 
-
 var userNumbers = [];
+var userNumb = prompt('введите число', '');
 
-do {
-  var userNumb = prompt('введите число', '');
+while ((userNumb !== null) && (userNumb !== '') && (isNaN(userNumb) === false) ) {
   userNumbers.push(userNumb);
-} while (userNumbers.length < 3);
+  userNumb = prompt('введите число', '');
+}
 
 console.log(userNumbers);
 
