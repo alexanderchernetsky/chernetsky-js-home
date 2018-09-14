@@ -7,8 +7,10 @@ var tasksCompleted = {
   'Anton': 99
 };
 
-test('who completed more tasks than others', () => {
-  expect(defineTheBestEmployee(tasksCompleted)).toBe('Anton');
+describe('function defineTheBestEmployee test', () => {
+  it('who completed more tasks than others', () => {
+    expect(defineTheBestEmployee(tasksCompleted)).toBe('Anton');
+  });
 });
 
 var tasksCompleted2 = {
@@ -18,6 +20,16 @@ var tasksCompleted2 = {
   'John': 99
 };
 
-test('who completed more tasks than others', () => {
-  expect(defineTheBestEmployee(tasksCompleted2)).toBe('Alex');
+describe('function defineTheBestEmployee test', () => {
+  it('who completed more tasks than others', () => {
+    expect(defineTheBestEmployee(tasksCompleted2)).toBe('Alex');
+  });
+});
+
+var tasksCompleted3 = {};
+
+describe('function defineTheBestEmployee test', () => {
+  it('who completed more tasks than others', () => {
+    expect(defineTheBestEmployee(tasksCompleted3)).toBe('empty object');
+  });
 });
