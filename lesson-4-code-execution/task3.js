@@ -10,8 +10,10 @@ do {
 
 console.log(userNumbers);
 
+var sum = 0;
+
 for (var i = 0; i < userNumbers.length; i++) {
-  var sum = sum + userNumbers[i];
+  sum += +userNumbers[i];
 }
 
 console.log(sum);
