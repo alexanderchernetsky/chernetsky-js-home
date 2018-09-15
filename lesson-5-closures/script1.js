@@ -11,9 +11,9 @@ function drawGrid(scale) {
       grid += gridEven;
     }
   }
-  return grid;
+  console.log(grid);
 }
 
-console.log(drawGrid(1));
-console.log(drawGrid(2));
-console.log(drawGrid(8));
+drawGrid(1);
+drawGrid(2);
+drawGrid(8);
