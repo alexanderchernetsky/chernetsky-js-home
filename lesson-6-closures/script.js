@@ -67,9 +67,6 @@ function calcAverageTip(someArray) {
 var johnAverageTip = calcAverageTip(johnExpenses.tips);
 var markAverageTip = calcAverageTip(markExpenses.tips);
 
-console.log(johnAverageTip);
-console.log(markAverageTip);
-
 if (johnAverageTip > markAverageTip) {
   console.log('Johns family paid the highest tips on average');
 } else if (markAverageTip > johnAverageTip) {
@@ -78,5 +75,6 @@ if (johnAverageTip > markAverageTip) {
   console.log('Both families paid the same tips on average');
 }
 
-module.exports = johnExpenses;
-module.exports = calcAverageTip;
+module.exports.johnExpenses = johnExpenses;
+module.exports.markExpenses = markExpenses;
+module.exports.calcAverageTip = calcAverageTip;
