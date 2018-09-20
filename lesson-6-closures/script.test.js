@@ -1,1 +1,2 @@
-var johnExpenses.calcTip = require
+var johnExpenses = require('./script');
+var calcAverageTip = require('./script');

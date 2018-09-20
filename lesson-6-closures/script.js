@@ -78,5 +78,5 @@ if (johnAverageTip > markAverageTip) {
   console.log('Both families paid the same tips on average');
 }
 
-module.exports = johnExpenses.calcTip;
-module.exports = calcAverageTip.calcTip;
+module.exports = johnExpenses;
+module.exports = calcAverageTip;
