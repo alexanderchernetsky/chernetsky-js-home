@@ -26,3 +26,5 @@ var interviewQuestion = function (jobTitle) {
 console.log(interviewQuestion('teacher')('John'));
 console.log(interviewQuestion('designer')('John'));
 console.log(interviewQuestion('plumber')('John'));
+
+module.exports = interviewQuestion;
