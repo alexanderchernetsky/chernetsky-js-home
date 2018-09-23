@@ -11,6 +11,12 @@ console.log(sum(5)(-1));
 
 var interviewQuestion = function (jobTitle) {
   return function (name) {
+    if (!jobTitle || !isNaN(parseInt(jobTitle))) {
+      return false;
+    }
+    if (!name || !isNaN(parseInt(name))) {
+      return false;
+    }
     var question;
     if (jobTitle === 'designer') {
       question = name + ' can you please explain what UX design is?';
