@@ -19,7 +19,7 @@ var johnExpenses = {
         this.paidAmounts.push(0.1 * this.bills[i] + this.bills[i]);
       }
     }
-    return 0;
+    return this.tips;
   }
 };
 
@@ -47,7 +47,7 @@ var markExpenses = {
         this.paidAmounts.push(0.1 * this.bills[i] + this.bills[i]);
       }
     }
-    return 0;
+    return this.tips;
   }
 };
 
