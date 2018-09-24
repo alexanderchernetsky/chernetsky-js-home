@@ -10,7 +10,7 @@ describe('interviewQuestion function tests', () => {
   });
 
   it('what is the question if job title is web developer and name is Jack', () => {
-    expect(interviewQuestion('web developer')('Jack')).toBe('Hello Jack what do you do?');
+    expect(interviewQuestion('web developer')('Jack')).toBe('Hello Jack, what do you do?');
   });
 
   it('what will happen if job title not entered', () => {

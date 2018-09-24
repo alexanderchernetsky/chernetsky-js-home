@@ -23,14 +23,14 @@ var interviewQuestion = function (jobTitle) {
     } else if (jobTitle === 'teacher') {
       question = 'What subject do you teach ' + name + '?';
     } else {
-      question = 'Hello ' + name + ' what do you do?';
+      question = 'Hello ' + name + ', what do you do?';
     }
     return question;
   };
 };
 
-console.log(interviewQuestion('teacher')('John'));
 console.log(interviewQuestion('designer')('John'));
+console.log(interviewQuestion('teacher')('John'));
 console.log(interviewQuestion('plumber')('John'));
 
 module.exports = interviewQuestion;
