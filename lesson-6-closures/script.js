@@ -6,18 +6,18 @@ var johnExpenses = {
     this.tips = [];
     this.paidAmounts = [];
     for (var i = 0; i < this.bills.length; i++) {
+      var percentage;
       if (this.bills[i] <= 50) {
-        this.tips.push(0.2 * this.bills[i]);
-        this.paidAmounts.push(0.2 * this.bills[i] + this.bills[i]);
+        percentage = 0.2;
       }
       if (this.bills[i] > 50 && this.bills[i] <= 200) {
-        this.tips.push(0.15 * this.bills[i]);
-        this.paidAmounts.push(0.15 * this.bills[i] + this.bills[i]);
+        percentage = 0.15;
       }
       if (this.bills[i] > 200) {
-        this.tips.push(0.1 * this.bills[i]);
-        this.paidAmounts.push(0.1 * this.bills[i] + this.bills[i]);
+        percentage = 0.1;
       }
+      this.tips.push(percentage * this.bills[i]);
+      this.paidAmounts.push(percentage * this.bills[i] + this.bills[i]);
     }
     return this.tips;
   }
@@ -34,18 +34,18 @@ var markExpenses = {
     this.tips = [];
     this.paidAmounts = [];
     for (var i = 0; i < this.bills.length; i++) {
+      var percentage;
       if (this.bills[i] <= 100) {
-        this.tips.push(0.2 * this.bills[i]);
-        this.paidAmounts.push(0.2 * this.bills[i] + this.bills[i]);
+        percentage = 0.2;
       }
       if (this.bills[i] > 100 && this.bills[i] <= 300) {
-        this.tips.push(0.1 * this.bills[i]);
-        this.paidAmounts.push(0.15 * this.bills[i] + this.bills[i]);
+        percentage = 0.1;
       }
       if (this.bills[i] > 300) {
-        this.tips.push(0.25 * this.bills[i]);
-        this.paidAmounts.push(0.1 * this.bills[i] + this.bills[i]);
+        percentage = 0.25;
       }
+      this.tips.push(percentage * this.bills[i]);
+      this.paidAmounts.push(percentage * this.bills[i] + this.bills[i]);
     }
     return this.tips;
   }
