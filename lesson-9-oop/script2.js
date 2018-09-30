@@ -1,15 +1,13 @@
 'use strict';
 
 function isPal(someString) {
-  var lowStr = someString.toLowerCase();
-  var trimedStr = '';
-  for (var key of lowStr) {
-    trimedStr += key.trim();
+  function trim(item) {
+    return item.trim();
   }
 
-  var reverseStr = trimedStr.split('').reverse().join('');
+  var reverseStr = someString.toLowerCase().split('').map(trim).reverse().join('');
 
-  return reverseStr === trimedStr;
+  return reverseStr === someString.toLowerCase().split('').map(trim).join('');
 }
 
 module.exports = isPal;
