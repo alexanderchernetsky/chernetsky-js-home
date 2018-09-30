@@ -14,11 +14,22 @@
   };
 
   Question.prototype.checkAnswer = function (ans) {
-    if (ans === this.correct) {
-      console.log('Correct answer!');
+    if (ans === 'exit') {
+      console.log('You have just interrupted the game!');
     } else {
-      console.log('Wrong answer. Try again :)');
+      var answ = parseInt(ans);
+      if (answ === this.correct) {
+        console.log('Correct answer!');
+        corrAnsCounter += 1;
+      } else {
+        console.log('Wrong answer. Try again :)');
+        incorrAnsCounter += 1;
+      }
     }
+  };
+
+  Question.prototype.logScore = function () {
+    console.log('Your score:\n' + corrAnsCounter + '-correct answers\n' + incorrAnsCounter + '-incorrect answers ');
   };
 
   var q1 = new Question('Is JavaScript the coolest programming language in the world?',
@@ -35,11 +46,16 @@
 
   var questions = [q1, q2, q3];
 
-  var n = Math.floor(Math.random() * questions.length);
+  var corrAnsCounter = 0;
+  var incorrAnsCounter = 0;
 
-  questions[n].displayQuestion();
-
-  var answer = parseInt(prompt('Please select the correct answer.'));
-
-  questions[n].checkAnswer(answer);
+  (function eternalQuiz() {
+    do {
+      var n = Math.floor(Math.random() * questions.length);
+      questions[n].displayQuestion();
+      var answer = (prompt('Please select the correct answer.'));
+      questions[n].checkAnswer(answer);
+      questions[n].logScore();
+    } while (answer !== 'exit');
+  })();
 })();
