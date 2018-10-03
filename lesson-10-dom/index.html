@@ -2,9 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>drinks project</title>
+    <style>
+      div {
+        margin-top: 100px;
+      }
+    </style>
   </head>
   <body>
-    <script src="script.js"></script>
+    <button type="button" name="but1" onclick="drinkInfoType()">ввод информации о напитке</button>
+    <button type="button" name="but2" onclick="getDrinkInfo()">получение информации о напитке</button>
+    <button type="button" name="but3" onclick="deleteDrinkInfo()">удаление информации о напитке</button>
+    <button type="button" name="but4" onclick="showDrinksList()">перечень всех напитков</button>
+    <div id="info"></div>
+
+    <script src="HashStorage.js"></script>
   </body>
 </html>
