@@ -60,10 +60,13 @@ document.querySelector('#but3').addEventListener('click', function () {
 document.querySelector('#but4').addEventListener('click', function () {
   console.log(drinkStorage.getKeys());
   var keysArr = drinkStorage.getKeys();
+  var drinkInf = document.createElement('p');
   for (var i = 4; i < keysArr.length; i++ ) {
     var par = document.createElement('span');
     var node = document.createTextNode(keysArr[i] + ', ');
-    par.appendChild(node);
-    document.getElementById('info').appendChild(par);
+    var smth = par.appendChild(node);
+    drinkInf.appendChild(smth);
   }
+  document.getElementById('info').appendChild(drinkInf);
 });
+
