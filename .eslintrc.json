@@ -1,9 +1,9 @@
 {
-  "extends": "eslint-config-airbnb-es5",
-  "env": {
-    "jest": true
-  },
-  "rules": {
-    "no-console": 0
-  }
+    "extends": "eslint-config-airbnb-es5",
+    "env": {
+      "jest": true
+    },
+    "rules": {
+      "no-console": 0
+    }
 }
