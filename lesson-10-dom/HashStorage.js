@@ -29,6 +29,9 @@ document.querySelector('#but1').addEventListener('click', function () {
     alco = 'нет';
   }
   var drinkRecipe = prompt('Введите рецепт');
+  if (!drinkRecipe) {
+    drinkRecipe = 'рецепт отсутсвует';
+  }
   drinkStorage.addValue(drinkName, [alco, drinkRecipe]);
   console.log(drinkStorage);
 });
@@ -60,13 +63,11 @@ document.querySelector('#but3').addEventListener('click', function () {
 document.querySelector('#but4').addEventListener('click', function () {
   console.log(drinkStorage.getKeys());
   var keysArr = drinkStorage.getKeys();
-  var drinkInf = document.createElement('p');
+  var drinkInf = document.createElement('span');
   for (var i = 4; i < keysArr.length; i++ ) {
-    var par = document.createElement('span');
-    var node = document.createTextNode(keysArr[i] + ', ');
-    var smth = par.appendChild(node);
-    drinkInf.appendChild(smth);
+    var tNode = document.createTextNode(keysArr[i] + ', ');
+    drinkInf.appendChild(tNode);
   }
+  document.getElementById('info').textContent = '';
   document.getElementById('info').appendChild(drinkInf);
 });
-
