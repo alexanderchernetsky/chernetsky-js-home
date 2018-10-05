@@ -1,27 +1,31 @@
 function HashStorage() {
   this.addValue = function (key, value) {
-    this[key] = value;
+    privateStorage[key] = value;
   };
   this.getValue = function (key) {
-    return this[key];
+    return privateStorage[key];
   };
   this.deleteValue = function (key) {
-    if (this[key]) {
-      delete this[key];
+    if (privateStorage[key]) {
+      delete privateStorage[key];
       return true;
     }
     return false;
   };
   this.getKeys = function () {
-    return Object.keys(this);
+    return Object.keys(privateStorage);
   };
+
+  var privateStorage = {};
 }
 
 var drinkStorage = new HashStorage();
 
 document.querySelector('#but1').addEventListener('click', function () {
   var drinkName = prompt('Введите название напитка');
-  console.log(drinkName);
+  if (!drinkName) {
+    drinkName = 'untitled';
+  }
   var alco = confirm('Напиток является алкогольным?');
   if (alco === true) {
     alco = 'да';
@@ -33,38 +37,32 @@ document.querySelector('#but1').addEventListener('click', function () {
     drinkRecipe = 'рецепт отсутсвует';
   }
   drinkStorage.addValue(drinkName, [alco, drinkRecipe]);
-  console.log(drinkStorage);
 });
 
 document.querySelector('#but2').addEventListener('click', function () {
   var drinkTitle = prompt('Введите название напитка, о котором хотите получить информацию');
-  console.log(drinkStorage.getValue(drinkTitle));
   if (drinkStorage.getValue(drinkTitle)) {
     document.getElementById('info').innerHTML = 'напиток ' + '<b>' + drinkTitle + '</b>' + '<br>' + 'алкогольный: ' +
-        '<b>' + drinkStorage[drinkTitle][0] + '</b>' + '<br>' + 'рецепт приготовления: ' + '<br>' + '<b>' +
-        drinkStorage[drinkTitle][1] + '</b>';
+        '<b>' + drinkStorage.getValue(drinkTitle)[0] + '</b>' + '<br>' + 'рецепт приготовления: ' + '<br>' + '<b>' +
+        drinkStorage.getValue(drinkTitle)[1] + '</b>';
   } else {
     document.getElementById('info').textContent = 'Напиток отсутствует!';
   }
 });
 
-
 document.querySelector('#but3').addEventListener('click', function () {
   var redundantDrink = prompt('Введите название напитка, информацию о котором хотите удалить');
-  console.log(drinkStorage);
   if (drinkStorage.deleteValue(redundantDrink)) {
     document.getElementById('info').textContent = 'Информация о напитке удалена!';
   } else {
     document.getElementById('info').textContent = 'Информация о напитке отсутствует!';
   }
-  console.log(drinkStorage);
 });
 
 document.querySelector('#but4').addEventListener('click', function () {
-  console.log(drinkStorage.getKeys());
   var keysArr = drinkStorage.getKeys();
   var drinkInf = document.createElement('span');
-  for (var i = 4; i < keysArr.length; i++ ) {
+  for (var i = 0; i < keysArr.length; i++ ) {
     var tNode = document.createTextNode(keysArr[i] + ', ');
     drinkInf.appendChild(tNode);
   }
