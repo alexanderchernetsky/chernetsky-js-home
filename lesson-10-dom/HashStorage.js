@@ -22,20 +22,14 @@ function HashStorage() {
 var drinkStorage = new HashStorage();
 
 document.querySelector('#but1').addEventListener('click', function () {
-  var drinkName = prompt('Введите название напитка');
-  if (!drinkName) {
-    drinkName = 'untitled';
-  }
+  var drinkName = prompt('Введите название напитка') || 'untitled';
   var alco = confirm('Напиток является алкогольным?');
   if (alco === true) {
     alco = 'да';
   } else {
     alco = 'нет';
   }
-  var drinkRecipe = prompt('Введите рецепт');
-  if (!drinkRecipe) {
-    drinkRecipe = 'рецепт отсутсвует';
-  }
+  var drinkRecipe = prompt('Введите рецепт') || 'рецепт отсутсвует';
   drinkStorage.addValue(drinkName, [alco, drinkRecipe]);
 });
 
