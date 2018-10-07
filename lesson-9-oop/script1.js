@@ -13,23 +13,23 @@
     }
   };
 
-  Question.prototype.checkAnswer = function (ans) {
-    if (ans === 'exit') {
-      console.log('You have just interrupted the game!');
+  Question.prototype.checkAnswer = function (ans, callback) {
+    var answ = parseInt(ans);
+    var sc;
+
+    if (answ === this.correct) {
+      console.log('Correct answer!');
+      sc = callback(true);
     } else {
-      var answ = parseInt(ans);
-      if (answ === this.correct) {
-        console.log('Correct answer!');
-        corrAnsCounter += 1;
-      } else {
-        console.log('Wrong answer. Try again :)');
-        incorrAnsCounter += 1;
-      }
+      console.log('Wrong answer. Try again :)');
+      sc = callback(false);
     }
+
+    this.displayScore(sc);
   };
 
-  Question.prototype.logScore = function () {
-    console.log('Your score:\n' + corrAnsCounter + '-correct answers\n' + incorrAnsCounter + '-incorrect answers ');
+  Question.prototype.displayScore = function (ourCorrAnsw) {
+    console.log('Your score:\n' + ourCorrAnsw + '-correct answers');
   };
 
   var q1 = new Question('Is JavaScript the coolest programming language in the world?',
@@ -46,16 +46,27 @@
 
   var questions = [q1, q2, q3];
 
-  var corrAnsCounter = 0;
-  var incorrAnsCounter = 0;
+  function score() {
+    var corrAnsw = 0;
+    return function (correct) {
+      if (correct) {
+        corrAnsw++;
+      }
+      return corrAnsw;
+    };
+  }
 
-  (function eternalQuiz() {
-    do {
-      var n = Math.floor(Math.random() * questions.length);
-      questions[n].displayQuestion();
-      var answer = (prompt('Please select the correct answer.'));
-      questions[n].checkAnswer(answer);
-      questions[n].logScore();
-    } while (answer !== 'exit');
-  })();
+  var keepScore = score();
+
+  function eternalQuiz() {
+    var n = Math.floor(Math.random() * questions.length);
+    questions[n].displayQuestion();
+    var answer = (prompt('Please select the correct answer.'));
+    if (answer !== 'exit') {
+      questions[n].checkAnswer(answer, keepScore);
+      eternalQuiz();
+    }
+  }
+
+  eternalQuiz();
 })();
