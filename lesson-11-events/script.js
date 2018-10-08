@@ -1,14 +1,14 @@
 'use strict';
 
 var siteFormContainer = [
-  { legendText: 'Для внесения вашего сайта в каталог, заполните форму:' },
+  { legendText: 'Для внесения вашего сайта в каталог, заполните форму:', type: 'legend' },
   { label: 'Разработчики:', type: 'text', name: 'developers', id: 'dev' },
   { label: 'Название сайта:', type: 'text', name: 'website-name', id: 'siteName' },
   { label: 'URL сайта:', type: 'text', name: 'website-url', id: 'siteURL' },
   { label: 'Дата запуска сайта:', type: 'text', name: 'website-start', id: 'start'},
   { label: 'Посетителей в сутки:', type: 'text', name: 'website-users', id: 'users'},
   { label: 'E-mail для связи:', type: 'email', name: 'author-email', id: 'email'},
-  { label: 'Рубрика каталога:', type: 'text', name: 'catalog-heading', id: 'heading', options: ['бытовая техника', 'здоровье', 'домашний уют'],
+  { label: 'Рубрика каталога:', type: 'select', name: 'catalog-heading', id: 'heading', options: ['бытовая техника', 'здоровье', 'домашний уют'],
     values: ['appliances', 'health', 'home'] },
   { span: 'Размещение:', type: 'radio', name: 'deployment', ids: ['freeDepl', 'paidDepl', 'vipDepl'], values: ['free', 'paid', 'vip'],
     labels: ['бесплатное', 'платное', 'VIP' ] },
@@ -20,7 +20,6 @@ var siteFormContainer = [
 (function generateForm(container) {
   var ourForm = document.getElementById('addSiteForm');
   var clonedForm = ourForm.cloneNode(true);
-
   var fieldset = document.createElement('fieldset');
   clonedForm.appendChild(fieldset);
 
@@ -50,6 +49,7 @@ var siteFormContainer = [
     input.type = type;
     input.name = name;
     input.id = id;
+    input.classList.add('wide');
     fieldset.appendChild(input);
     makeBreak();
   }
@@ -101,7 +101,7 @@ var siteFormContainer = [
     makeBreak();
   }
 
-  function textareaCreate(type, name, labelTxt, id, cols, rows) {
+  function textAreaCreate(type, name, labelTxt, id, cols, rows) {
     labelCreate(labelTxt, id);
     makeBreak();
     var textArea = document.createElement('textarea');
@@ -111,6 +111,7 @@ var siteFormContainer = [
     textArea.rows = rows;
     fieldset.appendChild(textArea);
     makeBreak();
+    textArea.classList.add('wide');
   }
 
   function buttCreate(type, value, form) {
@@ -121,29 +122,35 @@ var siteFormContainer = [
     fieldset.appendChild(butt);
   }
 
-  legendCreate(container[0].legendText);
+  function addFormElement(i) {
+    if (i.type === 'legend') {
+      legendCreate(i.legendText);
+    }
+    if ((i.type === 'text') || (i.type === 'email')) {
+      inputCreate(i.name, i.type, i.label, i.id);
+    }
+    if (i.type === 'select') {
+      selectCreate(i.name, i.id, i.options, i.values, i.label);
+    }
+    if (i.type === 'radio') {
+      radioCreate(i.span, i.type, i.name, i.ids, i.values, i.labels);
+    }
+    if (i.type === 'checkbox') {
+      checkboxCreate(i.type, i.name, i.label, i.id);
+    }
+    if (i.type === 'textarea') {
+      textAreaCreate(i.type, i.name, i.label, i.id, i.cols, i.rows);
+    }
+    if (i.type === 'button') {
+      buttCreate(i.type, i.value, i.form);
+    }
+  }
 
-  inputCreate(container[1].name, container[1].type, container[1].label, container[1].id);
+  container.forEach(addFormElement);
 
-  inputCreate(container[2].name, container[2].type, container[2].label, container[2].id);
-
-  inputCreate(container[3].name, container[3].type, container[3].label, container[3].id);
-
-  inputCreate(container[4].name, container[4].type, container[4].label, container[4].id);
-
-  inputCreate(container[5].name, container[5].type, container[5].label, container[5].id);
-
-  inputCreate(container[6].name, container[6].type, container[6].label, container[6].id);
-
-  selectCreate(container[7].name, container[7].id, container[7].options, container[7].values, container[7].label);
-
-  radioCreate(container[8].span, container[8].type, container[8].name, container[8].ids, container[8].values, container[8].labels);
-
-  checkboxCreate(container[9].type, container[9].name, container[9].label, container[9].id);
-
-  textareaCreate(container[10].type, container[10].name, container[10].label, container[10].id, container[10].cols, container[10].rows);
-
-  buttCreate(container[11].type, container[11].value, container[11].form);
-
-  document.getElementById('body').replaceChild(clonedForm, ourForm);
+  var divWrap = document.createElement('div');
+  divWrap.classList.add('wrapper');
+  document.getElementById('body').insertBefore(divWrap, ourForm);
+  divWrap.appendChild(clonedForm);
+  document.getElementById('body').removeChild(ourForm);
 })(siteFormContainer);
