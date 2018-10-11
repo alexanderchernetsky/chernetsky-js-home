@@ -16,6 +16,7 @@ for (var i = 0; i < picturesArr.length; i++) {
   picturesArr[i].style.top = picturesOffsetTop[i] + 'px';
 
   picturesArr[i].addEventListener('mousedown', dragStart, false);
+  picturesArr[i].addEventListener('transitionend', removeCss, false);
 }
 
 var wrapper = document.getElementById('wrapper');
@@ -41,6 +42,11 @@ function dragStart(EO) {
   dragImage.style.zIndex = '2';
   dragImage.style.cursor = 'move';
 
+  (function markPlaying() {
+    dragImage.classList.add('playing');
+  })();
+
+
   dragShiftX = EO.pageX - dragImage.offsetLeft;
   dragShiftY = EO.pageY - dragImage.offsetTop;
 
@@ -65,4 +71,6 @@ function dragStop(EO) {
   dragShiftY = null;
 }
 
-
+function removeCss(EO) {
+  this.classList.remove('playing');
+}
