@@ -29,39 +29,30 @@ function dragStart(EO) {
   EO = EO || window.event;
   EO.preventDefault();
 
-  console.log('mousedown ok');
   dragImage = EO.target;
-
-  console.log(EO.pageX);
-  console.log(EO.pageY);
-  console.log(dragImage.offsetLeft);
-  console.log(dragImage.offsetTop);
+  dragImage.style.zIndex = '2';
+  dragImage.style.cursor = 'move';
 
   dragShiftX = EO.pageX - dragImage.offsetLeft;
   dragShiftY = EO.pageY - dragImage.offsetTop;
 
-  console.log(dragImage);
-  console.log(dragShiftX);
-  console.log(dragShiftY);
+  wrapper.onmousemove = function dragMove(EO)  {
+    EO = EO || window.event;
+    EO.preventDefault();
+
+    dragImage.style.left = EO.pageX - dragShiftX + 'px';
+    dragImage.style.top =  EO.pageY - dragShiftY + 'px';
+  };
 }
 
 function dragStop(EO) {
   EO = EO || window.event;
-  console.log('mouseup ok');
+  EO.preventDefault();
+
+  dragImage.style.cursor = 'default';
+  dragImage.style.zIndex = '1';
+  wrapper.onmousemove = null;
   dragImage = null;
   dragShiftX = null;
   dragShiftY = null;
-
-  console.log(dragImage);
-  console.log(dragShiftX);
-  console.log(dragShiftY);
-}
-
-function Drag_Move(EO) {
-  EO = EO || window.event;
-  console.log('mousemove ok');
-  console.log(EO.pageX);
-  console.log(EO.pageY);
-  // dragImage.style.left =   'px';
-  // dragImage.style.top =  'px';
 }
