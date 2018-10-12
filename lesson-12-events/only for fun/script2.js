@@ -30,22 +30,21 @@ function dragStart(EO) {
   EO = EO || window.event;
   EO.preventDefault();
 
-  (function playAudio() {
-    var dragElem = EO.target;
-    var dragElemClass = dragElem.className;
-    var audio = document.querySelector('audio[class="' + dragElemClass + '"]');
-    if (!audio) return;
-    audio.play();
-  })();
-
   dragImage = EO.target;
   dragImage.style.zIndex = '2';
   dragImage.style.cursor = 'move';
 
+
+  (function playAudio() {
+    var dragElemClass = dragImage.className;
+    var audio = document.querySelector('audio[class="' + dragElemClass + '"]');
+    if (!audio) return; // for cases when we don't have audio files related to our img
+    audio.play();
+  })();
+
   (function markPlaying() {
     dragImage.classList.add('playing');
   })();
-
 
   dragShiftX = EO.pageX - dragImage.offsetLeft;
   dragShiftY = EO.pageY - dragImage.offsetTop;
