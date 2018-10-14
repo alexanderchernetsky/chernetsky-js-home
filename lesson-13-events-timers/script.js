@@ -55,9 +55,6 @@ var angle = 0; // это угол на который будут отклоня�
 
 var RADIUS = clockFace.offsetWidth / 2.5; // это расстояние от центра циферблата до центра кружков с числами
 
-var clockFaceCenterX = clockFace.offsetLeft + clockFace.offsetWidth / 2; //  координата Х центра циферблата
-var clockFaceCenterY = clockFace.offsetTop + clockFace.offsetHeight / 2; //  координата Y центра циферблата
-
 for (var i = 12; i > 0; i--) {
   var circleEl = document.createElement('div');
   var numberEl = document.createElement('div');
@@ -75,8 +72,8 @@ for (var i = 12; i > 0; i--) {
   numberEl.style.fontSize = clockFaceSize / 8 + 'px';
   numberEl.style.lineHeight = clockFaceSize / 8 + 'px';
 
-  var circleElCenterX = clockFaceCenterX  + RADIUS * Math.sin(angle);
-  var circleElCenterY = clockFaceCenterY  - RADIUS * Math.cos(angle);
+  var circleElCenterX = clockFace.offsetWidth / 2 + RADIUS * Math.sin(angle);
+  var circleElCenterY = clockFace.offsetHeight / 2 - RADIUS * Math.cos(angle);
 
   circleEl.style.left = Math.round(circleElCenterX - circleEl.offsetWidth / 2) + 'px';
   circleEl.style.top = Math.round(circleElCenterY - circleEl.offsetHeight / 2) + 'px';
@@ -84,10 +81,8 @@ for (var i = 12; i > 0; i--) {
   angle -= MINANGLE;
 }
 
-
-function tickTackClock() {
+function tickTackClock(hourH, minuteH, ) {
   var currTime = new Date();
-
 
   var hours = currTime.getHours();
   if (hours > 12) {
@@ -106,10 +101,9 @@ function tickTackClock() {
   hourHand.style.transform = 'rotate(' + hourHandAngle + 'deg)';
 }
 
-
 setInterval(tickTackClock, 1000);
 
-// форматирует переданную дату-время в формате чч:мм:сс
+// форматирует время в формате чч:мм:сс
 function formatTime() {
   var hours = this.getHours();
   var minutes = this.getMinutes();
@@ -117,7 +111,7 @@ function formatTime() {
   return str0L(hours, 2) + ':' + str0L(minutes, 2) + ':' + str0L(seconds, 2);
 }
 
-// дополняет строку Val слева нулями до длины Len
+// дополняет строку val слева нулями до длины len
 function str0L(val, len) {
   var strVal = val.toString();
   while (strVal.length < len) {
@@ -129,22 +123,21 @@ function str0L(val, len) {
 Date.prototype.formatRus = formatTime; // описываем новый метод для класса Date
 
 var belTimeEl = document.createElement('div');
-var bodyAr = document.getElementsByTagName('body');
-bodyAr[0].appendChild(belTimeEl);
+clockFace.appendChild(belTimeEl);
 belTimeEl.classList.add('rus-format-time');
+belTimeEl.style.fontSize = clockFaceSize / 12 + 'px';
 
 var currTime = new Date();
 var processedTime = currTime.formatRus();
 belTimeEl.innerHTML = processedTime;
 
-belTimeEl.style.left = clockFaceCenterX - belTimeEl.offsetWidth / 2 + 'px';
-belTimeEl.style.top = clockFace.offsetTop + clockFace.offsetHeight / 4 + 'px';
+belTimeEl.style.left =  clockFace.offsetWidth / 2 - belTimeEl.offsetWidth / 2 + 'px';
+belTimeEl.style.top = clockFace.offsetHeight / 2 - 2 * belTimeEl.offsetHeight + 'px';
 
-
-function tickTack() {
+function showCurrentTime() {
   currTime = new Date();
   processedTime = currTime.formatRus();
   belTimeEl.innerHTML = processedTime;
 }
 
-setInterval(tickTack, 1000);
+setInterval(showCurrentTime, 1000);

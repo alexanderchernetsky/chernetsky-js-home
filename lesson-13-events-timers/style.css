@@ -5,8 +5,8 @@ body {
 .clock-face {
   background-color: lightgrey;
   position: relative;
-  left: 100px;
-  top: 100px;
+  /*left: 100px;
+  top: 100px;*/
 }
 
 .hour-hand {
@@ -58,5 +58,5 @@ body {
 
 .rus-format-time {
   position: absolute;
-  font-size: 30px;
+  /*font-size: 30px;*/
 }
