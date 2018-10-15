@@ -11,8 +11,7 @@ function HashStorage() {
   };
   this.deleteValue = function (key) {
     if (storage[key]) {
-      delete storage[key];
-      return true;
+      return delete storage[key];
     }
     return false;
   };
