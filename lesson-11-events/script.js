@@ -17,22 +17,22 @@ var siteFormContainer = [
   { type: 'button', value: 'Опубликовать', form: 'addSiteForm'}
 ];
 
-(function generateForm(container) {
-  var ourForm = document.getElementById('addSiteForm');
-  var clonedForm = ourForm.cloneNode(true);
+var ourForm = document.getElementById('addSiteForm');
+
+(function generateForm(container, form) {
+  var clonedForm = form.cloneNode(true);
   var fieldset = document.createElement('fieldset');
   clonedForm.appendChild(fieldset);
 
   function makeBreak() {
-    var br = document.createElement('br');
-    fieldset.appendChild(br);
+    return document.createElement('br');
   }
 
   function legendCreate(legendText) {
     var legend = document.createElement('legend');
     var legendNode = document.createTextNode(legendText);
     legend.appendChild(legendNode);
-    fieldset.appendChild(legend);
+    return legend;
   }
 
   function labelCreate(labelTxt, id) {
@@ -40,22 +40,22 @@ var siteFormContainer = [
     var labelNode = document.createTextNode(labelTxt);
     label.appendChild(labelNode);
     label.htmlFor = id;
-    fieldset.appendChild(label);
+    return label;
   }
 
   function inputCreate(name, type, labelTxt, id) {
-    labelCreate(labelTxt, id);
+    fieldset.appendChild(labelCreate(labelTxt, id));
     var input = document.createElement('input');
     input.type = type;
     input.name = name;
     input.id = id;
     input.classList.add('wide');
-    fieldset.appendChild(input);
-    makeBreak();
+    fieldset.appendChild(makeBreak());
+    return input;
   }
 
   function selectCreate(name, id, opt, val, labelTxt) {
-    labelCreate(labelTxt, id);
+    fieldset.appendChild(labelCreate(labelTxt, id));
     var select = document.createElement('select');
     select.name = name;
     select.id = id;
@@ -68,15 +68,15 @@ var siteFormContainer = [
       select.appendChild(option);
     }
 
-    fieldset.appendChild(select);
-    makeBreak();
+    return select;
   }
 
   function radioCreate(span, type, name, ids, values, labels) {
+    var div = document.createElement('div');
     var spanTag = document.createElement('span');
     var spanNode = document.createTextNode(span);
     spanTag.appendChild(spanNode);
-    fieldset.appendChild(spanTag);
+    div.appendChild(spanTag);
 
     for (var i = 0; i < ids.length; i++) {
       var radio = document.createElement('input');
@@ -84,65 +84,71 @@ var siteFormContainer = [
       radio.name = name;
       radio.id = ids[i];
       radio.value = values[i];
-      fieldset.appendChild(radio);
-      labelCreate(labels[i], ids[i]);
+      div.appendChild(radio);
+      div.appendChild(labelCreate(labels[i], ids[i]));
     }
 
-    makeBreak();
+    return div;
   }
 
   function checkboxCreate(type, name, labelTxt, id) {
-    labelCreate(labelTxt, id);
+    fieldset.appendChild(labelCreate(labelTxt, id));
     var checkBox = document.createElement('input');
     checkBox.type = type;
     checkBox.name = name;
     checkBox.id = id;
-    fieldset.append(checkBox);
-    makeBreak();
+    return checkBox;
   }
 
   function textAreaCreate(type, name, labelTxt, id, cols, rows) {
-    labelCreate(labelTxt, id);
-    makeBreak();
+    fieldset.appendChild(labelCreate(labelTxt, id));
+    fieldset.appendChild(makeBreak());
     var textArea = document.createElement('textarea');
     textArea.name = name;
     textArea.id = id;
     textArea.cols = cols;
     textArea.rows = rows;
-    fieldset.appendChild(textArea);
-    makeBreak();
     textArea.classList.add('wide');
+    fieldset.appendChild(makeBreak());
+    return textArea;
   }
 
-  function buttCreate(type, value, form) {
+  function buttCreate(type, value, forma) {
     var butt = document.createElement('input');
     butt.type = type;
     butt.value = value;
-    butt.setAttribute('form', form);
-    fieldset.appendChild(butt);
+    butt.setAttribute('form', forma);
+    return butt;
   }
 
   function addFormElement(i) {
-    if (i.type === 'legend') {
-      legendCreate(i.legendText);
-    }
-    if ((i.type === 'text') || (i.type === 'email')) {
-      inputCreate(i.name, i.type, i.label, i.id);
-    }
-    if (i.type === 'select') {
-      selectCreate(i.name, i.id, i.options, i.values, i.label);
-    }
-    if (i.type === 'radio') {
-      radioCreate(i.span, i.type, i.name, i.ids, i.values, i.labels);
-    }
-    if (i.type === 'checkbox') {
-      checkboxCreate(i.type, i.name, i.label, i.id);
-    }
-    if (i.type === 'textarea') {
-      textAreaCreate(i.type, i.name, i.label, i.id, i.cols, i.rows);
-    }
-    if (i.type === 'button') {
-      buttCreate(i.type, i.value, i.form);
+    switch (i.type) {
+    case 'legend':
+      fieldset.appendChild(legendCreate(i.legendText));
+      break;
+    case 'text':
+    case 'email':
+      fieldset.appendChild(inputCreate(i.name, i.type, i.label, i.id));
+      break;
+    case 'select':
+      fieldset.appendChild(selectCreate(i.name, i.id, i.options, i.values, i.label));
+      fieldset.appendChild(makeBreak());
+      break;
+    case 'radio':
+      fieldset.appendChild(radioCreate(i.span, i.type, i.name, i.ids, i.values, i.labels));
+      break;
+    case 'checkbox':
+      fieldset.appendChild(checkboxCreate(i.type, i.name, i.label, i.id));
+      fieldset.appendChild(makeBreak());
+      break;
+    case 'textarea':
+      fieldset.appendChild(textAreaCreate(i.type, i.name, i.label, i.id, i.cols, i.rows));
+      break;
+    case 'button':
+      fieldset.appendChild(buttCreate(i.type, i.value, i.form));
+      break;
+    default:
+      console.error('Invalid form element. Break form creation');
     }
   }
 
@@ -150,7 +156,7 @@ var siteFormContainer = [
 
   var divWrap = document.createElement('div');
   divWrap.classList.add('wrapper');
-  document.getElementById('body').insertBefore(divWrap, ourForm);
+  document.getElementById('body').insertBefore(divWrap, form);
   divWrap.appendChild(clonedForm);
-  document.getElementById('body').removeChild(ourForm);
-})(siteFormContainer);
+  document.getElementById('body').removeChild(form);
+})(siteFormContainer, ourForm);
