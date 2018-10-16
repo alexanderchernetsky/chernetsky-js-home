@@ -19,12 +19,12 @@ function createWatch() {
   svgEl.setAttribute('height', baseRadius);
   svgEl.appendChild(createClockFaceCircle());
   svgEl.appendChild(createClockFaceLittleCircles());
+  svgEl.appendChild(createDigitalWatch());
   svgEl.appendChild(createHourArrow(hourArrowWidth));
   svgEl.appendChild(createMinuteArrow(minuteArrowWidth));
   svgEl.appendChild(createSecondArrow(secondArrowWidth));
   return svgEl;
 }
-
 
 function createClockFaceCircle() {
   const circleEl = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -67,6 +67,17 @@ function createHourCircleNumber(x, y, number) {
   return txt;
 }
 
+function createDigitalWatch() {
+  let textClock = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  textClock.setAttribute('x', baseRadius / 2 );
+  textClock.setAttribute('y', baseRadius / 2 + baseRadius / 10);
+  textClock.setAttribute('fill', 'white');
+  textClock.setAttribute('font-size', circleRadius);
+  textClock.setAttribute('text-anchor', 'middle');
+  textClock.id = 'text-clock';
+  return textClock;
+}
+
 function createHourArrow(width) {
   const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   arrow.setAttribute('x1', baseRadius / 2);
@@ -77,7 +88,6 @@ function createHourArrow(width) {
   arrow.setAttribute('stroke-width', width);
   arrow.setAttribute('stroke-linecap', 'round');
   arrow.id = 'hours';
-  arrow.style.transformOrigin = `0% ${width / 2}px`;
   return arrow;
 }
 
@@ -115,13 +125,13 @@ function tickTimer() {
   const thisMinute = now.getMinutes();
   const thisHour = now.getHours();
   updateWatch(thisHour, thisMinute, thisSecond);
-  //updateDigitalWatch(thisHour, thisMinute, thisSecond);
+  updateDigitalWatch(thisHour, thisMinute, thisSecond);
 }
 
 function updateWatch(hour, minute, second) {
-  const thisSecondRotate = (second / 60) * 360 - 90;
-  const thisMinuteRotate = (minute) / 60 * 360 - 90;
-  const thisHourRotate = (hour + minute / 60) / 12 * 360 - 90;
+  const thisSecondRotate = (second / 60) * 360;
+  const thisMinuteRotate = (minute) / 60 * 360;
+  const thisHourRotate = (hour + minute / 60) / 12 * 360;
   rotateHandle('seconds', thisSecondRotate);
   rotateHandle('minutes', thisMinuteRotate);
   rotateHandle('hours', thisHourRotate);
@@ -129,18 +139,13 @@ function updateWatch(hour, minute, second) {
 
 function rotateHandle(handle, degree) {
   const arrow = document.querySelector(`#${handle}`);
-  arrow.style.transform = `rotate(${degree}deg`;
-
+  arrow.setAttribute('transform', `rotate(${degree},${baseRadius / 2},${baseRadius / 2})`);
 }
 
-/*function updateDigitalWatch(hour, minute, second) {
-  const digitalWatchSeconds = document.querySelector('.secondstext');
-  const digitalWatchMinutes = document.querySelector('.minutestext');
-  const digitalWatchHours = document.querySelector('.hourstext');
-  digitalWatchSeconds.textContent = addZeroToNumber(second);
-  digitalWatchMinutes.textContent = addZeroToNumber(minute);
-  digitalWatchHours.textContent = addZeroToNumber(hour);
-}*/
+function updateDigitalWatch(hour, minute, second) {
+  let textClock = document.getElementById('text-clock');
+  textClock.innerHTML = addZeroToNumber(hour) + ':' + addZeroToNumber(minute) + ':' + addZeroToNumber(second);
+}
 
 function addZeroToNumber(currentTime) {
   return (`${currentTime}`.length < 2) ? (`0${currentTime}`) : currentTime;
