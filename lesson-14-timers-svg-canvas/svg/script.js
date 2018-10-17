@@ -68,8 +68,8 @@ function createHourCircleNumber(x, y, number) {
 }
 
 function createDigitalWatch() {
-  let textClock = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  textClock.setAttribute('x', baseRadius / 2 );
+  const textClock = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  textClock.setAttribute('x', baseRadius / 2);
   textClock.setAttribute('y', baseRadius / 2 + baseRadius / 10);
   textClock.setAttribute('fill', 'white');
   textClock.setAttribute('font-size', circleRadius);
@@ -143,7 +143,7 @@ function rotateHandle(handle, degree) {
 }
 
 function updateDigitalWatch(hour, minute, second) {
-  let textClock = document.getElementById('text-clock');
+  const textClock = document.getElementById('text-clock');
   textClock.innerHTML = addZeroToNumber(hour) + ':' + addZeroToNumber(minute) + ':' + addZeroToNumber(second);
 }
 
