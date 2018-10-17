@@ -1,4 +1,4 @@
-// 'use strict'
+'use strict';
 
 const baseRadius = 400; // радиус циферблата
 const circleRadius = 20; // радиус кружков с цифрами
