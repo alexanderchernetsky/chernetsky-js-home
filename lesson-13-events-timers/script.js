@@ -1,84 +1,117 @@
 'use strict';
 
 var CLOCKFACESIZE = 400; // clock diameter px (use it to scale the clock)
-var MINANGLE = (90 / 3) / 180 * Math.PI; // calculate the angle that is necessary for creating circles with numbers and translate it to radians
+var hourHandLength = CLOCKFACESIZE / 4; // hour hand length (divide by 4 to save proportions)
+var hourHandWidth = hourHandLength / 5; // hour hand width (divide by 20 to save proportions)
+var minuteHandLength = CLOCKFACESIZE / 2.8; // minute hand length (divide by 2.8 to save proportions)
+var minuteHandWidth = minuteHandLength / 16; // minute hand width (divide by 16 to save proportions)
+var secondHandLength = CLOCKFACESIZE / 2.2; // second hand length (divide by 2.2 to save proportions)
+var secondHandWidth = secondHandLength / 50; // second hand width (divide by 50 to save proportions)
+var radius = CLOCKFACESIZE / 2.5; // it's the length from the center of clock face to the center of every circle with number
+var CIRCLERADIUS = 40; // radius of circles with numbers
 
-var clockFace = document.createElement('div');
-var hourHand = document.createElement('div');
-var minuteHand = document.createElement('div');
-var secondHand = document.createElement('div');
 var bodyArr = document.getElementsByTagName('body');
 var body = bodyArr[0];
+body.appendChild(createWatch());
 
-clockFace.classList.add('clock-face');
-hourHand.classList.add('hour-hand');
-minuteHand.classList.add('minute-hand');
-secondHand.classList.add('second-hand');
+setInterval(updateDigitalWatch, 1000);
+setInterval(moveMechanicalWatches.bind(null, '.hour-hand', '.minute-hand', '.second-hand'), 1000);
 
-body.appendChild(clockFace);
-clockFace.appendChild(hourHand);
-clockFace.appendChild(minuteHand);
-clockFace.appendChild(secondHand);
+// UI
 
-clockFace.style.width = CLOCKFACESIZE + 'px';
-clockFace.style.height = CLOCKFACESIZE + 'px';
-clockFace.style.borderRadius = CLOCKFACESIZE / 2 + 'px';
-
-var hourHandLength = CLOCKFACESIZE / 4; // hour hand length (devide by 4 to save proportions)
-
-hourHand.style.height = hourHandLength + 'px';
-hourHand.style.width  = hourHandLength / 5 + 'px';
-hourHand.style.borderRadius = hourHandLength / 10 + 'px';
-hourHand.style.transformOrigin =  hourHandLength / 10  + 'px bottom';
-hourHand.style.left =  CLOCKFACESIZE / 2 - hourHandLength / 10 + 'px';
-hourHand.style.top =  CLOCKFACESIZE / 2 - hourHandLength + 'px';
-
-var minuteHandLength = CLOCKFACESIZE / 2.8; // minute hand length (devide by 2.8 to save proportions)
-
-minuteHand.style.height = minuteHandLength + 'px';
-minuteHand.style.width  = minuteHandLength / 16 + 'px';
-minuteHand.style.borderRadius = minuteHandLength / 32 + 'px';
-minuteHand.style.transformOrigin =  minuteHandLength / 32  + 'px bottom';
-minuteHand.style.left =  CLOCKFACESIZE / 2 - minuteHandLength / 32 + 'px';
-minuteHand.style.top =  CLOCKFACESIZE / 2 - minuteHandLength + 'px';
-
-var secondHandLength = CLOCKFACESIZE / 2.2; // second hand length (devide by 2.2 to save proportions)
-
-secondHand.style.height = secondHandLength + 'px';
-secondHand.style.width  = secondHandLength / 50 + 'px';
-secondHand.style.borderRadius = secondHandLength / 100 + 'px';
-secondHand.style.transformOrigin =  secondHandLength / 100  + 'px bottom';
-secondHand.style.left =  CLOCKFACESIZE / 2 - secondHandLength / 100 + 'px';
-secondHand.style.top =  CLOCKFACESIZE / 2 - secondHandLength + 'px';
-
-var angle = 0; // current angle for drawing circles with numbers(initially it should be equal 0)
-var radius = clockFace.offsetWidth / 2.5; // it's the length from the center of clock face to the center of every circle with number
-
-for (var i = 12; i > 0; i--) {
-  var circleEl = document.createElement('div');
-  var numberEl = document.createElement('div');
-  var number = document.createTextNode(i);
-  numberEl.appendChild(number);
-  circleEl.appendChild(numberEl);
-  clockFace.appendChild(circleEl);
-
-  circleEl.classList.add('circle');
-  circleEl.style.height = CLOCKFACESIZE / 8 + 'px';
-  circleEl.style.width  = CLOCKFACESIZE / 8 + 'px';
-  circleEl.style.borderRadius = CLOCKFACESIZE / 16 + 'px';
-
-  numberEl.classList.add('number');
-  numberEl.style.fontSize = CLOCKFACESIZE / 8 + 'px';
-  numberEl.style.lineHeight = CLOCKFACESIZE / 8 + 'px';
-
-  var circleElCenterX = clockFace.offsetWidth / 2 + radius * Math.sin(angle);
-  var circleElCenterY = clockFace.offsetHeight / 2 - radius * Math.cos(angle);
-
-  circleEl.style.left = Math.round(circleElCenterX - circleEl.offsetWidth / 2) + 'px';
-  circleEl.style.top = Math.round(circleElCenterY - circleEl.offsetHeight / 2) + 'px';
-
-  angle -= MINANGLE;
+function createWatch() {
+  var clockFace = document.createElement('div');
+  clockFace.classList.add('clock-face');
+  clockFace.style.width = CLOCKFACESIZE + 'px';
+  clockFace.style.height = CLOCKFACESIZE + 'px';
+  clockFace.style.borderRadius = CLOCKFACESIZE / 2 + 'px';
+  clockFace.appendChild(createClockFace());
+  clockFace.appendChild(createDigitalWatch());
+  clockFace.appendChild(createHourHandArrow());
+  clockFace.appendChild(createMinuteHandArrow());
+  clockFace.appendChild(createSecondHandArrow());
+  return clockFace;
 }
+
+function createClockFace() {
+  var angle = 0; // current angle for drawing circles with numbers(initially it should be equal 0)
+  var MINANGLE = (90 / 3) / 180 * Math.PI; // calculate the angle that is necessary for creating circles with numbers and translate it to radians
+  var clockFaceEl = document.createElement('div');
+
+  for (var i = 12; i > 0; i--) {
+    var circleEl = document.createElement('div');
+    var numberEl = document.createElement('div');
+    var number = document.createTextNode(i);
+    numberEl.appendChild(number);
+    circleEl.appendChild(numberEl);
+    clockFaceEl.appendChild(circleEl);
+
+    circleEl.classList.add('circle');
+    circleEl.style.height = CIRCLERADIUS + 'px';
+    circleEl.style.width  = CIRCLERADIUS + 'px';
+    circleEl.style.borderRadius = CIRCLERADIUS / 2 + 'px';
+
+    numberEl.classList.add('number');
+    numberEl.style.fontSize = CIRCLERADIUS + 'px';
+    numberEl.style.lineHeight = CIRCLERADIUS + 'px';
+
+    var circleElCenterX = CLOCKFACESIZE / 2 + radius * Math.sin(angle) - CIRCLERADIUS / 2;
+    var circleElCenterY = CLOCKFACESIZE / 2 - radius * Math.cos(angle) - CIRCLERADIUS / 2;
+
+    circleEl.style.left = Math.round(circleElCenterX - circleEl.offsetWidth / 2) + 'px';
+    circleEl.style.top = Math.round(circleElCenterY - circleEl.offsetHeight / 2) + 'px';
+
+    angle -= MINANGLE;
+  }
+  return clockFaceEl;
+}
+
+function createDigitalWatch() {
+  var digitalWatchEl = document.createElement('div');
+  digitalWatchEl.classList.add('rus-format-time');
+  digitalWatchEl.style.fontSize = CLOCKFACESIZE / 12 + 'px';
+  digitalWatchEl.style.left =  CLOCKFACESIZE / 2 - CLOCKFACESIZE / 6 + 'px';
+  digitalWatchEl.style.top = CLOCKFACESIZE / 2 - CLOCKFACESIZE / 6 + 'px';
+  return digitalWatchEl;
+}
+
+function createHourHandArrow() {
+  var hourHand = document.createElement('div');
+  hourHand.classList.add('hour-hand');
+  hourHand.style.height = hourHandLength + 'px';
+  hourHand.style.width  = hourHandWidth + 'px';
+  hourHand.style.borderRadius = hourHandLength / 10 + 'px';
+  hourHand.style.transformOrigin =  hourHandLength / 10  + 'px bottom';
+  hourHand.style.left =  CLOCKFACESIZE / 2 - hourHandLength / 10 + 'px';
+  hourHand.style.top =  CLOCKFACESIZE / 2 - hourHandLength + 'px';
+  return hourHand;
+}
+
+function createMinuteHandArrow() {
+  var minuteHand = document.createElement('div');
+  minuteHand.classList.add('minute-hand');
+  minuteHand.style.height = minuteHandLength + 'px';
+  minuteHand.style.width = minuteHandWidth + 'px';
+  minuteHand.style.borderRadius = minuteHandLength / 32 + 'px';
+  minuteHand.style.transformOrigin = minuteHandLength / 32 + 'px bottom';
+  minuteHand.style.left = CLOCKFACESIZE / 2 - minuteHandLength / 32 + 'px';
+  minuteHand.style.top = CLOCKFACESIZE / 2 - minuteHandLength + 'px';
+  return minuteHand;
+}
+
+function createSecondHandArrow() {
+  var secondHand = document.createElement('div');
+  secondHand.classList.add('second-hand');
+  secondHand.style.height = secondHandLength + 'px';
+  secondHand.style.width = secondHandWidth + 'px';
+  secondHand.style.borderRadius = secondHandLength / 100 + 'px';
+  secondHand.style.transformOrigin = secondHandLength / 100 + 'px bottom';
+  secondHand.style.left = CLOCKFACESIZE / 2 - secondHandLength / 100 + 'px';
+  secondHand.style.top = CLOCKFACESIZE / 2 - secondHandLength + 'px';
+  return secondHand;
+}
+
+// Logic
 
 function moveMechanicalWatches(hourHandClassName, minuteHandClassName, secondHandClassName) {
   var currTime = new Date();
@@ -104,7 +137,11 @@ function moveMechanicalWatches(hourHandClassName, minuteHandClassName, secondHan
   hourHandArrow.style.transform = 'rotate(' + hourHandAngle + 'deg)';
 }
 
-setInterval(moveMechanicalWatches.bind(null, '.hour-hand', '.minute-hand', '.second-hand'), 1000);
+function updateDigitalWatch() {
+  var digitalWatchEl = document.querySelector('.rus-format-time');
+  var currTime = new Date();
+  digitalWatchEl.innerHTML = currTime.formatRus();
+}
 
 // форматирует время в формате чч:мм:сс
 function formatTime() {
@@ -124,23 +161,3 @@ function str0L(val, len) {
 }
 
 Date.prototype.formatRus = formatTime; // описываем новый метод formatRus для класса Date
-
-var digitalWatchEl = document.createElement('div');
-digitalWatchEl.classList.add('rus-format-time');
-digitalWatchEl.style.fontSize = CLOCKFACESIZE / 12 + 'px';
-clockFace.appendChild(digitalWatchEl);
-
-var currTime = new Date();
-var processedTime = currTime.formatRus();
-digitalWatchEl.innerHTML = processedTime;
-
-digitalWatchEl.style.left =  clockFace.offsetWidth / 2 - digitalWatchEl.offsetWidth / 2 + 'px';
-digitalWatchEl.style.top = clockFace.offsetHeight / 2 - 2 * digitalWatchEl.offsetHeight + 'px';
-
-function showCurrentTime() {
-  currTime = new Date();
-  processedTime = currTime.formatRus();
-  digitalWatchEl.innerHTML = processedTime;
-}
-
-setInterval(showCurrentTime, 1000);
