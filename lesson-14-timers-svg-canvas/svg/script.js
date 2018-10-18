@@ -62,8 +62,9 @@ function createHourCircleNumber(x, y, number) {
   txt.setAttribute('x', x);
   txt.setAttribute('y', y);
   txt.setAttribute('fill', 'black');
-  txt.setAttribute('font-size', circleRadius);
+  txt.setAttribute('font-size', `${circleRadius}px`);
   txt.setAttribute('text-anchor', 'middle');
+  txt.setAttribute('alignment-baseline', 'central');
   return txt;
 }
 
@@ -144,7 +145,7 @@ function rotateHandle(handle, degree) {
 
 function updateDigitalWatch(hour, minute, second) {
   const textClock = document.getElementById('text-clock');
-  textClock.innerHTML = addZeroToNumber(hour) + ':' + addZeroToNumber(minute) + ':' + addZeroToNumber(second);
+  textClock.innerHTML = `${addZeroToNumber(hour)}:${addZeroToNumber(minute)}:${addZeroToNumber(second)}`;
 }
 
 function addZeroToNumber(currentTime) {
