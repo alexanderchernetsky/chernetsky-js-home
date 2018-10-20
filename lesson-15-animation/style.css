@@ -1,0 +1,38 @@
+body {
+  margin: 20px;
+}
+
+input {
+  border: none;
+  font-size: 20px;
+  width: 120px;
+}
+
+#score {
+  display: inline-block;
+  font-size: 40px;
+  padding-left: 100px;
+}
+
+#field {
+  background-color: #F0EE7E;
+  border: 2px solid darkgray;
+  position: relative;
+}
+
+#ball {
+  background-color: red;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#racquet1 {
+  background-color: green;
+}
+
+#racquet2 {
+  background-color: #191497;
+  float: right;
+}
