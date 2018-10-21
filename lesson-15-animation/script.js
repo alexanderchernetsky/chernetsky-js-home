@@ -82,7 +82,6 @@ var body = document.getElementsByTagName('body')[0];
     ball.style.position = 'absolute';
     ball.style.left = '50%';
     ball.style.top = '50%';
-    ball.style.transform = 'translate(-50%, -50%)';
     return ball;
   }
 
@@ -102,8 +101,8 @@ var body = document.getElementsByTagName('body')[0];
 var ball = {
   width: BALLSIZE,
   height: BALLSIZE,
-  posX: FIELDWIDTH / 2,
-  posY: FIELDHEIGHT / 2,
+  posX: FIELDWIDTH / 2 - BALLSIZE / 2,
+  posY: FIELDHEIGHT / 2 - BALLSIZE / 2,
   speedX: 0,
   speedY: 0,
   update: function () {
@@ -118,7 +117,7 @@ var area = {
   height: FIELDHEIGHT
 };
 
-var raqLeft = {
+var racLeft = {
   height: FIRSTRAQUETLENGTH,
   width: FIRSTRAQUETLENGTH / 10,
   speedY: 0,
@@ -129,7 +128,7 @@ var raqLeft = {
   }
 };
 
-var raqRight = {
+var racRight = {
   height: SECONDRAQUETLENGTH,
   width: SECONDRAQUETLENGTH / 10,
   speedY: 0,
@@ -139,6 +138,13 @@ var raqRight = {
     raqObj2.style.top = Math.round(this.posY) + 'px';
   }
 };
+
+var player1score = 0;
+var player2score = 0;
+var scoreEl1 = document.getElementById('player1');
+scoreEl1.textContent = player1score;
+var scoreEl2 = document.getElementById('player2');
+scoreEl2.textContent = player2score;
 
 // logic
 
@@ -151,6 +157,9 @@ var but = document.getElementsByTagName('input')[0];
 but.addEventListener('click', startGame, false);
 
 function startGame() {
+  ball.posX = FIELDWIDTH / 2 - BALLSIZE / 2;
+  ball.posY = FIELDHEIGHT / 2 - BALLSIZE / 2;
+  
   if (Math.floor(Math.random() * 2) + 1 === 1) {
     ball.speedX = -(Math.floor(Math.random() * 6) + 5);
   } else {
@@ -165,35 +174,38 @@ function startGame() {
 }
 
 function tick() {
-  // raquets
-  raqRight.posY += raqRight.speedY;
-  raqLeft.posY += raqLeft.speedY;
-  if (raqRight.posY < 0) {
-    raqRight.posY = 0;
+  // racquets
+  racRight.posY += racRight.speedY;
+  racLeft.posY += racLeft.speedY;
+  if (racRight.posY < 0) {
+    racRight.posY = 0;
   }
-  if (raqRight.posY + raqRight.height > area.height) {
-    raqRight.posY = area.height - raqRight.height;
+  if (racRight.posY + racRight.height > area.height) {
+    racRight.posY = area.height - racRight.height;
   }
-  if (raqLeft.posY < 0) {
-    raqLeft.posY = 0;
+  if (racLeft.posY < 0) {
+    racLeft.posY = 0;
   }
-  if (raqLeft.posY + raqLeft.height > area.height) {
-    raqLeft.posY = area.height - raqLeft.height;
+  if (racLeft.posY + racLeft.height > area.height) {
+    racLeft.posY = area.height - racLeft.height;
   }
-  raqRight.update();
-  raqLeft.update();
+  racRight.update();
+  racLeft.update();
 
-  // ball
+  // ball and area
+
   ball.posX += ball.speedX;
   ball.posY += ball.speedY;
 
   if (ball.posX + ball.width > area.width) {
-    ball.speedX = -ball.speedX;
+    ball.speedX = 0;
+    ball.speedY = 0;
     ball.posX = area.width - ball.width;
   }
 
   if (ball.posX < 0) {
-    ball.speedX = -ball.speedX;
+    ball.speedX = 0;
+    ball.speedY = 0;
     ball.posX = 0;
   }
 
@@ -207,25 +219,50 @@ function tick() {
     ball.posY = 0;
   }
 
+  // ball and racquet
+
+  if (ball.posX > area.width - ball.width - racRight.width) {
+    if (ball.posY > racRight.posY && ball.posY < racRight.posY + racRight.height) {
+      ball.posX = area.width - ball.width - racRight.width
+      ball.speedX = -ball.speedX;
+    } else if (ball.posX === area.width - ball.width) {
+      player1score++;
+      console.log('goal right');
+
+    }
+  }
+
+  if (ball.posX < racRight.width) {
+    if (ball.posY > racLeft.posY && ball.posY < racLeft.posY + racLeft.height) {
+      ball.posX = racRight.width
+      ball.speedX = -ball.speedX;
+    } else if (ball.posX === 0) {
+      player2score++;
+      console.log('goal left');
+
+    }
+  }
+
   ball.update();
+  scoreEl1.textContent = player1score;
+  scoreEl2.textContent = player2score;
 }
 
 function stopRaquets(EO) {
   EO = EO || window.event;
-  EO.preventDefault();
 
   switch (EO.which) {
   case 38:
-    raqRight.speedY = 0;
+    racRight.speedY = 0;
     break;
   case 40:
-    raqRight.speedY = 0;
+    racRight.speedY = 0;
     break;
   case 16:
-    raqLeft.speedY = 0;
+    racLeft.speedY = 0;
     break;
   case 17:
-    raqLeft.speedY = 0;
+    racLeft.speedY = 0;
     break;
   default:
     break;
@@ -234,20 +271,19 @@ function stopRaquets(EO) {
 
 function moveRaquets(EO) {
   EO = EO || window.event;
-  EO.preventDefault();
 
   switch (EO.which) {
   case 38:
-    raqRight.speedY = -2;
+    racRight.speedY = -3;
     break;
   case 40:
-    raqRight.speedY = 2;
+    racRight.speedY = 3;
     break;
   case 16:
-    raqLeft.speedY = -2;
+    racLeft.speedY = -3;
     break;
   case 17:
-    raqLeft.speedY = 2;
+    racLeft.speedY = 3;
     break;
   default:
     break;
