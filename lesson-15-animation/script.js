@@ -8,6 +8,8 @@ var SECONDRAQUETLENGTH = 120; // the length of second player raquet
 
 var body = document.getElementsByTagName('body')[0];
 
+// draw UI
+
 (function createGameTable() {
   body.appendChild(createButton());
   body.appendChild(createScore());
@@ -95,6 +97,8 @@ var body = document.getElementsByTagName('body')[0];
   }
 }());
 
+// describe objects
+
 var ball = {
   width: BALLSIZE,
   height: BALLSIZE,
@@ -132,46 +136,78 @@ var raqRight = {
   posY: 0,
   update: function () {
     var raqObj2 = document.getElementById('raquet2');
-    console.log(raqObj2);
     raqObj2.style.top = Math.round(this.posY) + 'px';
   }
 };
 
-window.addEventListener('keydown', startMoveRaquets, false);
+// logic
 
-function startMoveRaquets(EO) {
-  setInterval(moveRaquets(EO), 40);
+var timer = setInterval(tick, 40);
+
+function tick() {
+  raqRight.posY += raqRight.speedY;
+  raqLeft.posY += raqLeft.speedY;
+  if (raqRight.posY < 0) {
+    raqRight.posY = 0;
+  }
+  if (raqRight.posY + raqRight.height > area.height) {
+    raqRight.posY = area.height - raqRight.height;
+  }
+  if (raqLeft.posY < 0) {
+    raqLeft.posY = 0;
+  }
+  if (raqLeft.posY + raqLeft.height > area.height) {
+    raqLeft.posY = area.height - raqLeft.height;
+  }
+  raqRight.update();
+  raqLeft.update();
 }
 
-function moveRaquets(EO) {
-  console.log(EO.which);
+
+window.addEventListener('keydown', moveRaquets, false);
+window.addEventListener('keyup', stopRaquets, false);
+
+
+function stopRaquets(EO) {
+  EO = EO || window.event;
+  EO.preventDefault();
 
   switch (EO.which) {
   case 38:
-    raqRight.speedY = -2;
-    raqRight.posY += raqRight.speedY;
-    raqRight.update();
+    raqRight.speedY = 0;
     break;
   case 40:
-    raqRight.speedY = 2;
-    raqRight.posY += raqRight.speedY;
-    raqRight.update();
+    raqRight.speedY = 0;
     break;
   case 16:
-    raqLeft.speedY = -2;
-    raqLeft.posY += raqLeft.speedY;
-    raqLeft.update();
+    raqLeft.speedY = 0;
     break;
   case 17:
-    raqLeft.speedY = 2;
-    raqLeft.posY += raqLeft.speedY;
-    raqLeft.update();
+    raqLeft.speedY = 0;
     break;
   default:
     break;
   }
+}
 
+function moveRaquets(EO) {
+  EO = EO || window.event;
+  EO.preventDefault();
 
-
-
+  switch (EO.which) {
+  case 38:
+    raqRight.speedY = -2;
+    break;
+  case 40:
+    raqRight.speedY = 2;
+    break;
+  case 16:
+    raqLeft.speedY = -2;
+    break;
+  case 17:
+    raqLeft.speedY = 2;
+    break;
+  default:
+    break;
+  }
 }
