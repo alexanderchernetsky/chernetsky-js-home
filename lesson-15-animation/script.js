@@ -102,10 +102,10 @@ var body = document.getElementsByTagName('body')[0];
 var ball = {
   width: BALLSIZE,
   height: BALLSIZE,
-  posX: 0,
-  posY: 0,
-  speedX: 10,
-  speedY: 10,
+  posX: FIELDWIDTH / 2,
+  posY: FIELDHEIGHT / 2,
+  speedX: 0,
+  speedY: 0,
   update: function () {
     var ballObj = document.getElementById('ball');
     ballObj.style.top = Math.round(this.posY) + 'px';
@@ -144,7 +144,28 @@ var raqRight = {
 
 var timer = setInterval(tick, 40);
 
+window.addEventListener('keydown', moveRaquets, false);
+window.addEventListener('keyup', stopRaquets, false);
+
+var but = document.getElementsByTagName('input')[0];
+but.addEventListener('click', startGame, false);
+
+function startGame() {
+  if (Math.floor(Math.random() * 2) + 1 === 1) {
+    ball.speedX = -(Math.floor(Math.random() * 6) + 5);
+  } else {
+    ball.speedX = Math.floor(Math.random() * 6) + 5;
+  }
+
+  if (Math.floor(Math.random() * 2) + 1 === 1) {
+    ball.speedY = -(Math.floor(Math.random() * 5) + 1);
+  } else {
+    ball.speedY = Math.floor(Math.random() * 5) + 1;
+  }
+}
+
 function tick() {
+  // raquets
   raqRight.posY += raqRight.speedY;
   raqLeft.posY += raqLeft.speedY;
   if (raqRight.posY < 0) {
@@ -161,12 +182,33 @@ function tick() {
   }
   raqRight.update();
   raqLeft.update();
+
+  // ball
+  ball.posX += ball.speedX;
+  ball.posY += ball.speedY;
+
+  if (ball.posX + ball.width > area.width) {
+    ball.speedX = -ball.speedX;
+    ball.posX = area.width - ball.width;
+  }
+
+  if (ball.posX < 0) {
+    ball.speedX = -ball.speedX;
+    ball.posX = 0;
+  }
+
+  if (ball.posY + ball.height > area.height) {
+    ball.speedY = -ball.speedY;
+    ball.posY = area.height - ball.height;
+  }
+
+  if (ball.posY < 0) {
+    ball.speedY = -ball.speedY;
+    ball.posY = 0;
+  }
+
+  ball.update();
 }
-
-
-window.addEventListener('keydown', moveRaquets, false);
-window.addEventListener('keyup', stopRaquets, false);
-
 
 function stopRaquets(EO) {
   EO = EO || window.event;
