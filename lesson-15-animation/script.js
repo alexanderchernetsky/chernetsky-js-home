@@ -7,6 +7,7 @@ var FIRSTRAQUETLENGTH = 120; // the length of first player raquet
 var SECONDRAQUETLENGTH = 120; // the length of second player raquet
 
 var body = document.getElementsByTagName('body')[0];
+var audio = document.getElementsByTagName('audio')[0];
 
 // draw UI
 
@@ -80,8 +81,6 @@ var body = document.getElementsByTagName('body')[0];
     ball.style.borderRadius = BALLSIZE / 2 + 'px';
     ball.style.backgroundColor = 'red';
     ball.style.position = 'absolute';
-    ball.style.left = '50%';
-    ball.style.top = '50%';
     return ball;
   }
 
@@ -139,27 +138,25 @@ var racRight = {
   }
 };
 
-var player1score = 0;
-var player2score = 0;
-var scoreEl1 = document.getElementById('player1');
-scoreEl1.textContent = player1score;
-var scoreEl2 = document.getElementById('player2');
-scoreEl2.textContent = player2score;
-
 // logic
 
-var timer = setInterval(tick, 40);
+var score = [0, 0];
+var scoreEl1 = document.getElementById('player1');
+var scoreEl2 = document.getElementById('player2');
 
-window.addEventListener('keydown', moveRaquets, false);
-window.addEventListener('keyup', stopRaquets, false);
+window.addEventListener('keydown', accelerateRacquets, false);
+window.addEventListener('keyup', stopRacquets, false);
 
 var but = document.getElementsByTagName('input')[0];
 but.addEventListener('click', startGame, false);
 
-var stopped = false;
+var gameStopped = false;
 
+var timer = setInterval(tick, 40);
 
 function startGame() {
+  stopGame();
+
   ball.posX = FIELDWIDTH / 2 - BALLSIZE / 2;
   ball.posY = FIELDHEIGHT / 2 - BALLSIZE / 2;
 
@@ -175,24 +172,20 @@ function startGame() {
     ball.speedY = Math.floor(Math.random() * 5) + 1;
   }
 
-  if (stopped === true) {
-    timer = setInterval(tick, 40);
-  }
-
-
+  timer = setInterval(tick, 40);
 }
 
-
-
-
-function stop() {
+function stopGame() {
   clearInterval(timer);
-  stopped = true;
+  gameStopped = true;
 }
-
 
 function tick() {
-  // racquets
+  controlRacquets();
+  controlBall();
+}
+
+function controlRacquets() {
   racRight.posY += racRight.speedY;
   racLeft.posY += racLeft.speedY;
   if (racRight.posY < 0) {
@@ -209,8 +202,10 @@ function tick() {
   }
   racRight.update();
   racLeft.update();
+}
 
-  // ball and area
+function controlBall() {
+  // ball and area interaction
 
   ball.posX += ball.speedX;
   ball.posY += ball.speedY;
@@ -237,37 +232,36 @@ function tick() {
     ball.posY = 0;
   }
 
-  // ball and racquet
+  // ball and racquet interaction
 
   if (ball.posX > area.width - ball.width - racRight.width) {
     if (ball.posY > racRight.posY && ball.posY < racRight.posY + racRight.height) {
-      ball.posX = area.width - ball.width - racRight.width
+      ball.posX = area.width - ball.width - racRight.width;
       ball.speedX = -ball.speedX;
+      audio.play();
     } else if (ball.posX === area.width - ball.width) {
-      player1score++;
-      console.log('goal right');
-      stop();
-
+      score[0]++;
+      scoreEl1.textContent = score[0];
+      stopGame();
     }
   }
 
   if (ball.posX < racRight.width) {
     if (ball.posY > racLeft.posY && ball.posY < racLeft.posY + racLeft.height) {
-      ball.posX = racRight.width
+      ball.posX = racRight.width;
       ball.speedX = -ball.speedX;
+      audio.play();
     } else if (ball.posX === 0) {
-      player2score++;
-      console.log('goal left');
-      stop();
+      score[1]++;
+      scoreEl2.textContent = score[1];
+      stopGame();
     }
   }
 
   ball.update();
-  scoreEl1.textContent = player1score;
-  scoreEl2.textContent = player2score;
 }
 
-function stopRaquets(EO) {
+function stopRacquets(EO) {
   EO = EO || window.event;
 
   switch (EO.which) {
@@ -288,21 +282,21 @@ function stopRaquets(EO) {
   }
 }
 
-function moveRaquets(EO) {
+function accelerateRacquets(EO) {
   EO = EO || window.event;
 
   switch (EO.which) {
   case 38:
-    racRight.speedY = -3;
+    racRight.speedY = -4;
     break;
   case 40:
-    racRight.speedY = 3;
+    racRight.speedY = 4;
     break;
   case 16:
-    racLeft.speedY = -3;
+    racLeft.speedY = -4;
     break;
   case 17:
-    racLeft.speedY = 3;
+    racLeft.speedY = 4;
     break;
   default:
     break;
