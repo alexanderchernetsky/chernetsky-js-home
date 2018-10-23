@@ -4,8 +4,11 @@ const baseRadius = 400; // радиус циферблата
 const circleRadius = 20; // радиус кружков с цифрами
 const numbersBaseRadius = baseRadius / 2.5; // радиус оси цифр циферблата
 const hourArrowWidth = 20; // ширина часовой стрелочки часов
+const hourArrowLength = 90; // длина часовой стрелочки часов
 const minuteArrowWidth = 10; // ширина минутной стрелочки часов
+const minuteArrowLength = 130; // длина минутной стрелочки часов
 const secondArrowWidth = 2; // ширина секундной стрелочки часов
+const secondArrowLength = 160; // длина секундной стрелочки часов
 
 const body = document.getElementsByTagName('body')[0];
 body.appendChild(createWatch());
@@ -20,9 +23,9 @@ function createWatch() {
   svgEl.appendChild(createClockFaceCircle());
   svgEl.appendChild(createClockFaceLittleCircles());
   svgEl.appendChild(createDigitalWatch());
-  svgEl.appendChild(createHourArrow(hourArrowWidth));
-  svgEl.appendChild(createMinuteArrow(minuteArrowWidth));
-  svgEl.appendChild(createSecondArrow(secondArrowWidth));
+  svgEl.appendChild(createArrow(hourArrowWidth, hourArrowLength, 'black', 'hours'));
+  svgEl.appendChild(createArrow(minuteArrowWidth, minuteArrowLength, 'darkblue', 'minutes'));
+  svgEl.appendChild(createArrow(secondArrowWidth, secondArrowLength, 'red', 'seconds'));
   return svgEl;
 }
 
@@ -79,42 +82,16 @@ function createDigitalWatch() {
   return textClock;
 }
 
-function createHourArrow(width) {
+function createArrow(width, length, color, id) {
   const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   arrow.setAttribute('x1', baseRadius / 2);
   arrow.setAttribute('y1', baseRadius / 2);
   arrow.setAttribute('x2', baseRadius / 2);
-  arrow.setAttribute('y2', baseRadius / 4);
-  arrow.setAttribute('stroke', 'black');
+  arrow.setAttribute('y2', baseRadius / 2 - length);
   arrow.setAttribute('stroke-width', width);
+  arrow.setAttribute('stroke', color);
   arrow.setAttribute('stroke-linecap', 'round');
-  arrow.id = 'hours';
-  return arrow;
-}
-
-function createMinuteArrow(width) {
-  const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  arrow.setAttribute('x1', baseRadius / 2);
-  arrow.setAttribute('y1', baseRadius / 2);
-  arrow.setAttribute('x2', baseRadius / 2);
-  arrow.setAttribute('y2', baseRadius / 6);
-  arrow.setAttribute('stroke', 'darkblue');
-  arrow.setAttribute('stroke-width', width);
-  arrow.setAttribute('stroke-linecap', 'round');
-  arrow.id = 'minutes';
-  return arrow;
-}
-
-function createSecondArrow(width) {
-  const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  arrow.setAttribute('x1', baseRadius / 2);
-  arrow.setAttribute('y1', baseRadius / 2);
-  arrow.setAttribute('x2', baseRadius / 2);
-  arrow.setAttribute('y2', baseRadius / 10);
-  arrow.setAttribute('stroke', 'red');
-  arrow.setAttribute('stroke-width', width);
-  arrow.setAttribute('stroke-linecap', 'round');
-  arrow.id = 'seconds';
+  arrow.id = id;
   return arrow;
 }
 
