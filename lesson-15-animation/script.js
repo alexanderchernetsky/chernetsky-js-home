@@ -106,8 +106,9 @@ var ball = {
   speedY: 0,
   update: function () {
     var ballObj = document.getElementById('ball');
-    ballObj.style.top = Math.round(this.posY) + 'px';
-    ballObj.style.left = Math.round(this.posX) + 'px';
+    // ballObj.style.top = Math.round(this.posY) + 'px';
+    // ballObj.style.left = Math.round(this.posX) + 'px';
+    ballObj.style.transform = 'translateX(' + Math.round(this.posX) + 'px) translateY(' + Math.round(this.posY) + 'px) translateZ(0)';
   }
 };
 
@@ -123,7 +124,8 @@ var racLeft = {
   posY: 0,
   update: function () {
     var raqObj1 = document.getElementById('raquet1');
-    raqObj1.style.top = Math.round(this.posY) + 'px';
+    // raqObj1.style.top = Math.round(this.posY) + 'px';
+    raqObj1.style.transform = 'translateY(' + Math.round(this.posY) + 'px) translateZ(0)';
   }
 };
 
@@ -134,7 +136,8 @@ var racRight = {
   posY: 0,
   update: function () {
     var raqObj2 = document.getElementById('raquet2');
-    raqObj2.style.top = Math.round(this.posY) + 'px';
+    // raqObj2.style.top = Math.round(this.posY) + 'px';
+    raqObj2.style.transform = 'translateY(' + Math.round(this.posY) + 'px) translateZ(0)';
   }
 };
 
