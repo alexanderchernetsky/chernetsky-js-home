@@ -6,110 +6,103 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Homework</title>
-    <style>
-      body {
-        margin: 2em auto;
-        width: 90%;
-        font-family: "Open Sans", serif;
-        font-size: 0.8em;
-      }
-      .manage-drinks > * {
-        display: block;
-      }
-      .manage-drinks .drink-info {
-        margin: 0.5em auto;
-        width: 95%;
-        max-width: 320px;
-        color: black;
-      }
-      input {
-        margin: 0.5em auto;
-        padding: 0.5em 1em;
-        width: 95%;
-        max-width: 320px;
-        border: 1px solid slategrey;
-        color: white;
-        background: darkslategray;
-        cursor: pointer;
-      }
-      input:hover {
-        color: #eee;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div class="manage-drinks">
-      <input type='button' value='Добавить напиток' onclick='addDrink()'>
-      <input type='button' value='Показать информацию о напитке' onclick='showDrinkInfo()'>
-      <input type='button' value='Удалить напиток' onclick='removeDrink()'>
-      <input type='button' value='Показать меню напитков' onclick='showDrinksMenu()'>
-      <div id="message" class="drink-info"></div>
+      <input type='button' value='Добавить напиток'>
+      <input type='button' value='Показать информацию о напитке'>
+      <input type='button' value='Удалить напиток'>
+      <input type='button' value='Показать меню напитков'>
+      <div id="message-drinks" class="info"></div>
     </div>
+    <div class="manage-dishes">
+      <input type='button' value='Добавить блюдо'>
+      <input type='button' value='Показать информацию о блюде'>
+      <input type='button' value='Удалить блюдо'>
+      <input type='button' value='Показать меню блюд'>
+      <div id="message-dishes" class="info"></div>
+    </div>
+
     <script src="localstorage.js"></script>
     <script>
       'use strict';
 
-      var drinkStorage = new TLocalStorage('DRINKS');
-
       (function start() {
+        // drinks
+        var drinkStorage = new TLocalStorage('DRINKS');
+        var drinkInfoEl = document.getElementById('message-drinks');
+        var drinksInputArr = document.querySelectorAll('.manage-drinks input');
+        drinksInputArr[0].addEventListener('click', addStuff.bind(null, drinkStorage), false);
+        drinksInputArr[1].addEventListener('click', showStuffInfo.bind(null, drinkStorage, drinkInfoEl), false);
+        drinksInputArr[2].addEventListener('click', removeStuff.bind(null, drinkStorage, drinkInfoEl), false);
+        drinksInputArr[3].addEventListener('click', showAllStuff.bind(null, drinkStorage, drinkInfoEl), false);
         drinkStorage.reset();
+        // dishes
+        var dishStorage = new TLocalStorage('DISHES');
+        var dishInfoEl = document.getElementById('message-dishes');
+        var dishesInputArr = document.querySelectorAll('.manage-dishes input');
+        dishesInputArr[0].addEventListener('click', addStuff.bind(null, dishStorage), false);
+        dishesInputArr[1].addEventListener('click', showStuffInfo.bind(null, dishStorage, dishInfoEl), false);
+        dishesInputArr[2].addEventListener('click', removeStuff.bind(null, dishStorage, dishInfoEl), false);
+        dishesInputArr[3].addEventListener('click', showAllStuff.bind(null, dishStorage, dishInfoEl), false);
+        dishStorage.reset();
       }());
 
-      function addDrink() {
-        var drinkName = prompt('Введите название напитка', 'Test Drink').toLowerCase().trim();
+      function addStuff(storage) {
+        var stuffName = prompt('Введите название', 'Test stuff').toLowerCase().trim();
         var fHash = {};
-
-        if (drinkName) {
-          fHash.recipe = prompt('Введите рецепт приготовления напитка', 'Test Recipe');
-          fHash.alcohol = confirm('Ваш напиток алкогольный?') ? 'да' : 'нет';
-          return drinkStorage.addValue(drinkName, fHash);
+        if (stuffName) {
+          fHash.recipe = prompt('Введите рецепт приготовления', 'Test Recipe');
+          fHash.alcohol = confirm('Содержится ли алкоголь?') ? 'да' : 'нет';
+          return storage.addValue(stuffName, fHash);
         } else {
-          alert('Ввод отменен!')
+          alert('Ввод отменен!');
         }
       }
 
-      function showDrinkInfo() {
-        var drinkName = prompt('Введите название напитка: ','').toLowerCase().trim();
-        var getDrinkInfo = (drinkName) ? drinkStorage.getValue(drinkName) : 0;
+      function showStuffInfo(storage, domElement) {
+        var stuffName = prompt('Введите название: ','').toLowerCase().trim();
+        var getStuffInfo = (stuffName) ? storage.getValue(stuffName) : 0;
         var resultHTML = '';
 
-        if (getDrinkInfo) {
-          var print1 = 'Напиток: ' + drinkName + '<br>';
-          var print2 = 'Алкогольный: ' + getDrinkInfo.alcohol + '<br>';
-          var print3 = 'Рецепт приготовления: ' + getDrinkInfo.recipe + '<br>';
+        if (getStuffInfo) {
+          var print1 = 'Название: ' + stuffName + '<br>';
+          var print2 = 'Содержание алкоголя: ' + getStuffInfo.alcohol + '<br>';
+          var print3 = 'Рецепт приготовления: ' + getStuffInfo.recipe + '<br>';
 
           resultHTML = print1 + print2 + print3;
         } else {
-          resultHTML = 'Ошибка! Нет такого напитка';
+          resultHTML = 'Ошибка! Нет такой иформации.';
         }
-        document.getElementById('message').innerHTML = resultHTML;
+        domElement.innerHTML = resultHTML;
       }
 
-      function removeDrink() {
-        var drinkName = prompt('Какой напиток удалить?').toLowerCase().trim();
-        var delDrinkInfo = drinkStorage.deleteValue(drinkName);
+      function removeStuff(storage, domElement) {
+        var stuffName = prompt('Что удалить?').toLowerCase().trim();
+        var delDrinkInfo = storage.deleteValue(stuffName);
         var resultHTML = '';
 
         if (delDrinkInfo) {
-          resultHTML = 'Информация о напитке ' + drinkName + ' удалена';
+          resultHTML = 'Информация о ' + stuffName + ' удалена';
         } else {
-          resultHTML = 'Ошибка! Нет такого напитка';
+          resultHTML = 'Ошибка! Нет такой информации.';
         }
-        document.getElementById('message').innerHTML = resultHTML;
+        domElement.innerHTML = resultHTML;
       }
 
-      function showDrinksMenu() {
-        var showMenuInfo = drinkStorage.getKeys();
+      function showAllStuff(storage, domElement) {
+        var showStuffInfo = storage.getKeys();
         var resultHTML = '';
 
-        if (showMenuInfo.length) {
-          for (var i = 0; i < showMenuInfo.length; i++) {
-            resultHTML += (i + 1) + '. ' + showMenuInfo[i] + '<br>';
+        if (showStuffInfo.length) {
+          for (var i = 0; i < showStuffInfo.length; i++) {
+            resultHTML += (i + 1) + '. ' + showStuffInfo[i] + '<br>';
           }
         } else {
           resultHTML = 'Меню пустое, добавьте напитки.';
         }
-        document.getElementById('message').innerHTML = resultHTML;
+        domElement.innerHTML = resultHTML;
       }
     </script>
   </body>
