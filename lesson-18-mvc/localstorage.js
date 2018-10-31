@@ -3,27 +3,23 @@
 function TLocalStorage(storageName) {
   var self = this;
   var pHash = {};
+  var pHashString;
 
   self.reset = function () {
     pHash = {};
-    console.log(storageName);
     if (storageName in localStorage) {
-      console.log('yes');
       pHash = JSON.parse(localStorage.getItem(storageName));
     }
-    console.log(pHash);
   };
 
   self.addValue = function (key, value) {
     pHash[key] = value;
-    var pHashStr = JSON.stringify(pHash);
-    localStorage.setItem(storageName, pHashStr);
+    self.saveToStorage();
   };
 
   self.deleteValue = function (key) {
     delete pHash[key];
-    var pHashStr = JSON.stringify(pHash);
-    localStorage.setItem(storageName, pHashStr);
+    self.saveToStorage();
     return delete pHash[key];
   };
 
@@ -33,5 +29,10 @@ function TLocalStorage(storageName) {
 
   self.getKeys = function () {
     return (Object.keys(pHash));
+  };
+
+  self.saveToStorage = function () {
+    pHashString = JSON.stringify(pHash);
+    localStorage.setItem(storageName, pHashString);
   };
 }
