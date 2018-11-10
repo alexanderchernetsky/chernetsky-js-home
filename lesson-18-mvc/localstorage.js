@@ -4,12 +4,10 @@ function TLocalStorage(storageName) {
   var self = this;
   var pHash = {};
   var pHashString;
+  var storageName = storageName;
 
   self.reset = function () {
-    pHash = {};
-    if (storageName in localStorage) {
-      pHash = JSON.parse(localStorage.getItem(storageName));
-    }
+    pHash = JSON.parse(localStorage.getItem(storageName)) || {};
   };
 
   self.addValue = function (key, value) {
@@ -32,7 +30,6 @@ function TLocalStorage(storageName) {
   };
 
   self.saveToStorage = function () {
-    pHashString = JSON.stringify(pHash);
-    localStorage.setItem(storageName, pHashString);
+    localStorage.setItem(storageName, JSON.stringify(pHash));
   };
 }
