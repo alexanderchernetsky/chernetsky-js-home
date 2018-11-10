@@ -11,7 +11,9 @@ var audio = document.getElementsByTagName('audio')[0];
 
 // draw UI
 
-(function createGameTable() {
+window.addEventListener('DOMContentLoaded', createGameTable, false);
+
+function createGameTable() {
   body.appendChild(createButton());
   body.appendChild(createScore());
   body.appendChild(createField());
@@ -93,7 +95,10 @@ var audio = document.getElementsByTagName('audio')[0];
     button.style.width = '120px';
     return button;
   }
-}());
+
+  var but = document.getElementsByTagName('input')[0];
+  but.addEventListener('click', startGame, false);
+}
 
 // describe objects
 
@@ -144,21 +149,16 @@ var racRight = {
 // logic
 
 var score = [0, 0];
-var scoreEl1 = document.getElementById('player1');
-var scoreEl2 = document.getElementById('player2');
 
 window.addEventListener('keydown', accelerateRacquets, false);
 window.addEventListener('keyup', stopRacquets, false);
-
-var but = document.getElementsByTagName('input')[0];
-but.addEventListener('click', startGame, false);
 
 var gameStopped = false;
 
 var timer = setInterval(tick, 40);
 
 function startGame() {
-  stopGame();
+  clearInterval(timer);
 
   ball.posX = FIELDWIDTH / 2 - BALLSIZE / 2;
   ball.posY = FIELDHEIGHT / 2 - BALLSIZE / 2;
@@ -244,6 +244,7 @@ function controlBall() {
       audio.play();
     } else if (ball.posX === area.width - ball.width) {
       score[0]++;
+      var scoreEl1 = document.getElementById('player1');
       scoreEl1.textContent = score[0];
       stopGame();
     }
@@ -256,6 +257,7 @@ function controlBall() {
       audio.play();
     } else if (ball.posX === 0) {
       score[1]++;
+      var scoreEl2 = document.getElementById('player2');
       scoreEl2.textContent = score[1];
       stopGame();
     }
