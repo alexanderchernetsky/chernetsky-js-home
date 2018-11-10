@@ -45,11 +45,12 @@
       <input type='button' value='Показать меню напитков' onclick='showDrinksMenu()'>
       <div id="message" class="drink-info"></div>
     </div>
-    <script src="hashstorage.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="AJAXStorage.js"></script>
     <script>
       'use strict';
 
-      var drinkStorage = new THashStorage();
+      var drinkStorage = new TAJAXStorage();
 
       function addDrink() {
         var drinkName = prompt('Введите название напитка', 'Test Drink').toLowerCase().trim();
