@@ -1,80 +1,69 @@
 function TAJAXStorage() {
   const self = this;
-  let pHash = {};
-  const AjaxHandlerScript = 'http://fe.it-academy.by/AjaxStringStorage2.php';
-  let UpdatePassword;
+  const ajaxHandlerScript = 'http://fe.it-academy.by/AjaxStringStorage2.php';
+  let pHash;
+  let updatePassword;
   $.ajax(
     {
-      url: AjaxHandlerScript,
+      url: ajaxHandlerScript,
       type: 'POST',
       data: { f: 'READ', n: 'CHERNETSKY_STORAGE_DRINKS' },
       cache: false,
-      success(ourObj) {
-        if (ourObj.error !== undefined) {
-          alert(ourObj.error);
+      success(resultH) {
+        if (resultH.error !== undefined) {
+          alert(resultH.error);
         } else {
           pHash = {};
-          console.log(pHash);
-          if (ourObj.result !== '') {
-            pHash = JSON.parse(ourObj.result);
-            console.log(pHash);
-            /* if (!MessagesA.length) {
-              MessagesA = [];
-            } */
+          if (resultH.result !== '') {
+            pHash = JSON.parse(resultH.result);
           }
         }
       },
-      error: ErrorHandler,
+      error: errorHandler,
     },
   );
 
-
   self.addValue = function (key, value) {
-    UpdatePassword = Math.random();
+    updatePassword = Math.random();
     $.ajax(
       {
-        url: AjaxHandlerScript,
+        url: ajaxHandlerScript,
         type: 'POST',
         data: {
           f: 'LOCKGET',
           n: 'CHERNETSKY_STORAGE_DRINKS',
-          p: UpdatePassword,
+          p: updatePassword,
         },
         cache: false,
-        success: LockGetReady,
-        error: ErrorHandler,
+        success: lockGetReady,
+        error: errorHandler,
       },
     );
 
-    function LockGetReady(ResultH) {
-      if (ResultH.error !== undefined) {
-        alert(ResultH.error);
+    function lockGetReady(resultH) {
+      if (resultH.error !== undefined) {
+        alert(resultH.error);
       } else {
         pHash = {};
         pHash[key] = value;
-        console.log(pHash);
-        if (ResultH.result != '') {
-          pHash = JSON.parse(ResultH.result);
+        if (resultH.result != '') {
+          pHash = JSON.parse(resultH.result);
           pHash[key] = value;
-          console.log(pHash);
-          /* if (!MessagesA.length) {
-            MessagesA = {};
-          } */
         }
 
         $.ajax(
           {
-            url: AjaxHandlerScript,
+            url: ajaxHandlerScript,
             type: 'POST',
             data: {
               f: 'UPDATE',
               n: 'CHERNETSKY_STORAGE_DRINKS',
               v: JSON.stringify(pHash),
-              p: UpdatePassword,
+              p: updatePassword,
             },
             cache: false,
-            success: UpdateReady,
-            error: ErrorHandler,
+            success: updateReady,
+            error: errorHandler,
           },
         );
       }
@@ -86,48 +75,44 @@ function TAJAXStorage() {
   };
 
   self.deleteValue = function (key) {
-    UpdatePassword = Math.random();
+    updatePassword = Math.random();
     $.ajax(
       {
-        url: AjaxHandlerScript,
+        url: ajaxHandlerScript,
         type: 'POST',
         data: {
           f: 'LOCKGET',
           n: 'CHERNETSKY_STORAGE_DRINKS',
-          p: UpdatePassword,
+          p: updatePassword,
         },
         cache: false,
-        success: LockGetReady,
-        error: ErrorHandler,
+        success: lockGetReady,
+        error: errorHandler,
       },
     );
 
-    function LockGetReady(ResultH) {
-      if (ResultH.error !== undefined) {
-        alert(ResultH.error);
+    function lockGetReady(resultH) {
+      if (resultH.error !== undefined) {
+        alert(resultH.error);
       } else {
-        if (ResultH.result != '') {
-          pHash = JSON.parse(ResultH.result);
+        if (resultH.result != '') {
+          pHash = JSON.parse(resultH.result);
           delete pHash[key];
-          console.log(pHash);
-          /* if (!MessagesA.length) {
-            MessagesA = {};
-          } */
         }
 
         $.ajax(
           {
-            url: AjaxHandlerScript,
+            url: ajaxHandlerScript,
             type: 'POST',
             data: {
               f: 'UPDATE',
               n: 'CHERNETSKY_STORAGE_DRINKS',
               v: JSON.stringify(pHash),
-              p: UpdatePassword,
+              p: updatePassword,
             },
             cache: false,
-            success: UpdateReady,
-            error: ErrorHandler,
+            success: updateReady,
+            error: errorHandler,
           },
         );
       }
@@ -141,28 +126,12 @@ function TAJAXStorage() {
   };
 }
 
-
-function ErrorHandler(jqXHR, StatusStr, ErrorStr) {
+function errorHandler(jqXHR, StatusStr, ErrorStr) {
   alert(`${StatusStr} ${ErrorStr}`);
 }
 
-// function ReadReady(ResultH) {
-//   if (ResultH.error !== undefined) {
-//     alert(ResultH.error);
-//   } else {
-//     let MessagesA = [];
-//     if (ResultH.result !== '') {
-//       MessagesA = JSON.parse(ResultH.result);
-//       if (!MessagesA.length) {
-//         MessagesA = [];
-//       }
-//     }
-//     // ShowMessages();
-//   }
-// }
-
-function UpdateReady(ResultH) {
-  if (ResultH.error != undefined) {
-    alert(ResultH.error);
+function updateReady(resultH) {
+  if (resultH.error != undefined) {
+    alert(resultH.error);
   }
 }
