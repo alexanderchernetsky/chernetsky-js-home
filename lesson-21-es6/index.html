@@ -3,28 +3,41 @@
   <head>
     <meta charset="UTF-8">
     <title>SPA-homework</title>
+    <style>
+      #content {
+        column-width: 100px;
+        column-count: 3;
+        column-gap: 10px;
+      }
+
+      div > a {
+        display: block;
+      }
+    </style>
   </head>
   <body>
     <div id="page"></div>
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
     <script>
 
       const divEl = document.getElementById('page');
 
-      function switchToMainPage() {
+      function switchToMainPage(EO) {
+        EO = EO || window.event;
+        EO.preventDefault();
         switchToState({page: 'main'});
       }
 
       function switchToContentsPage(EO) {
         EO = EO || window.event;
         EO.preventDefault();
-
         switchToState({page: 'contents'});
       }
 
       function switchToArticlePage(EO) {
         EO = EO || window.event;
         EO.preventDefault();
-        
+        console.log('hi');
         switchToState({page: 'article'});
       }
 
@@ -38,8 +51,6 @@
         let state = decodeURIComponent(location.hash.substr(1));
         
         (state === '') ? (state = {page: 'main'}) : (state = JSON.parse(state));
-       
-        let page= '';
 
         switch (state.page) {
           case 'main':
@@ -49,37 +60,195 @@
             createContentsPage();
             break;
           case 'article':
-            page += 'page 3';
-            divEl.innerHTML = page;
+            createArticlePage();
             break;
         }
-
       }
-
 
       renderNewState();
 
-  function createMainPage() {
-    const header = document.createElement('b');
-    header.innerHTML = 'Энциклопедия';
-    header.style.fontSize = 40 + 'px';
-    const contentsLink = document.createElement('a');
-    contentsLink.innerHTML = 'список статей здесь';
-    contentsLink.href = '';
-    const br = document.createElement('br');
-
-    divEl.innerHTML = '';
-    divEl.appendChild(header);
-    divEl.appendChild(br);
-    divEl.appendChild(contentsLink);
-
-    contentsLink.addEventListener('click', switchToContentsPage, false);
-  }
+      function createMainPage() {
+        const header = document.createElement('b');
+        header.innerHTML = 'Энциклопедия';
+        header.style.fontSize = 40 + 'px';
+        const contentsLink = document.createElement('a');
+        contentsLink.innerHTML = 'список статей здесь';
+        contentsLink.href = '';
+        const br = document.createElement('br');
+        divEl.innerHTML = '';
+        divEl.appendChild(header);
+        divEl.appendChild(br);
+        divEl.appendChild(contentsLink);
+        contentsLink.addEventListener('click', switchToContentsPage, false);
+      }
 
   
-  function createContentsPage() {
-    
-  }
+      function createContentsPage() {
+        const header = document.createElement('b');
+        header.innerHTML = 'Оглавление';
+        header.style.fontSize = 40 + 'px';
+        const br = document.createElement('br');
+        const divContentEl = document.createElement('div');
+        divContentEl.id = 'content';
+        const letterArr = ['A', 'Б', 'В', 'Г', 'П'];
+        for (let z = 0; z < 5; z++) {
+          let pEl = document.createElement('p');
+          pEl.innerHTML = letterArr[z];
+          divContentEl.appendChild(pEl);
+        }
+
+        divEl.innerHTML = '';
+        divEl.appendChild(header);
+        divEl.appendChild(br);
+        divEl.appendChild(divContentEl);
+
+
+        pElementsArray = document.querySelectorAll('p');
+
+        refreshArticles();
+        addListeners();
+      }
+
+      function createArticlePage() {
+        divEl.innerHTML = '';
+      }
+
+
+
+      function addListeners () {
+        /*divContentEl.addEventListener('click', switchToArticlePage, false);*/
+        /*pElementsArray.forEach(function(elem) {
+          elem.addEventListener('click', switchToArticlePage, false);
+        });*/
+
+        divContentEl.addEventListener('click', function(EO){
+          console.log(EO.target);
+          if(EO.target.tagName == "a"){
+            console.log('BUTTON CLICKED');
+          }
+        });
+      }
+      const AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
+      var articlesArray;
+      var pElementsArray;
+
+
+      /*
+      var UpdatePassword;
+
+      function SendMessage() {
+        UpdatePassword = Math.random();
+        $.ajax(
+            {
+              url: AjaxHandlerScript,
+              type: 'POST',
+              data: {
+                f: 'LOCKGET',
+                n: 'CHERNETSKY_CONTENTS_ARTICLES',
+                p: UpdatePassword
+              },
+              cache: false,
+              success: LockGetReady,
+              error: ErrorHandler
+            }
+        );
+      }
+
+      function LockGetReady(ResultH) {
+        if (ResultH.error !== undefined)
+          alert(ResultH.error);
+        else {
+          MessagesA = [{name: 'африка'}, {name: 'аргентина'}, {name: 'беларусь'}, {name: 'венгрия'}, {name: 'германия'}, {name: 'польша'}, {name: 'голландия'}];
+          if (ResultH.result != "") {
+            MessagesA = [{name: 'африка'}, {name: 'аргентина'}, {name: 'беларусь'}, {name: 'венгрия'}, {name: 'германия'}, {name: 'польша'}, {name: 'голландия'}];
+            if (!MessagesA.length)
+              MessagesA = [];
+          }
+
+          $.ajax(
+              {
+                url: AjaxHandlerScript,
+                type: 'POST',
+                data: {
+                  f: 'UPDATE',
+                  n: 'CHERNETSKY_CONTENTS_ARTICLES',
+                  v: JSON.stringify(MessagesA),
+                  p: UpdatePassword
+                },
+                cache: false,
+                success: UpdateReady,
+                error: ErrorHandler
+              }
+          );
+        }
+      }
+
+      function UpdateReady(ResultH) {
+        if (ResultH.error != undefined)
+          alert(ResultH.error);
+      }
+
+      SendMessage();*/
+
+      function refreshArticles() {
+        $.ajax(
+            {
+              url: AjaxHandlerScript,
+              type: 'POST',
+              data: {f: 'READ', n: 'CHERNETSKY_CONTENTS_ARTICLES'},
+              cache: false,
+              success: readReady,
+              error: errorHandler
+            }
+        );
+      }
+
+      function readReady(ResultH) {
+        if (ResultH.error !== undefined)
+          alert(ResultH.error);
+        else {
+          articlesArray = [];
+          if (ResultH.result !== "") {
+            articlesArray = JSON.parse(ResultH.result);
+            if (!articlesArray.length)
+              articlesArray = [];
+          }
+          showArticles();
+        }
+      }
+
+
+
+      function showArticles() {
+        for (let i = 0; i < articlesArray.length; i++) {
+          let article = articlesArray[i];
+          switch (article.name.charAt(0)) {
+            case 'а':
+              pElementsArray[0].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              break;
+            case 'б':
+              pElementsArray[1].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              break;
+            case 'в':
+              pElementsArray[2].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              break;
+            case 'г':
+              pElementsArray[3].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              break;
+            case 'п':
+              pElementsArray[4].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              break;
+          }
+        }
+      }
+
+
+
+      function errorHandler(jqXHR, StatusStr, ErrorStr) {
+        alert(StatusStr + ' ' + ErrorStr);
+      }
+
+
 
 
     </script>
