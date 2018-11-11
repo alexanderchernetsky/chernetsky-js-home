@@ -7,15 +7,24 @@
   <body>
     <div id="page"></div>
     <script>
+
+      const divEl = document.getElementById('page');
+
       function switchToMainPage() {
         switchToState({page: 'main'});
       }
 
-      function switchToContentsPage() {
+      function switchToContentsPage(EO) {
+        EO = EO || window.event;
+        EO.preventDefault();
+
         switchToState({page: 'contents'});
       }
 
-      function switchToArticlePage() {
+      function switchToArticlePage(EO) {
+        EO = EO || window.event;
+        EO.preventDefault();
+        
         switchToState({page: 'article'});
       }
 
@@ -27,37 +36,55 @@
 
       function renderNewState() {
         let state = decodeURIComponent(location.hash.substr(1));
-
+        
         (state === '') ? (state = {page: 'main'}) : (state = JSON.parse(state));
-
+       
         let page= '';
 
         switch (state.page) {
           case 'main':
-            page += 'page 1';
+            createMainPage();
             break;
           case 'contents':
-            page += 'page 2';
+            createContentsPage();
             break;
           case 'article':
             page += 'page 3';
+            divEl.innerHTML = page;
             break;
         }
 
-        const divEl = document.getElementById('page');
-        divEl.innerHTML = page;
       }
 
 
-      renderNewState()
+      renderNewState();
 
+  function createMainPage() {
+    const header = document.createElement('b');
+    header.innerHTML = 'Энциклопедия';
+    header.style.fontSize = 40 + 'px';
+    const contentsLink = document.createElement('a');
+    contentsLink.innerHTML = 'список статей здесь';
+    contentsLink.href = '';
+    const br = document.createElement('br');
 
+    divEl.innerHTML = '';
+    divEl.appendChild(header);
+    divEl.appendChild(br);
+    divEl.appendChild(contentsLink);
 
+    contentsLink.addEventListener('click', switchToContentsPage, false);
+  }
+
+  
+  function createContentsPage() {
+    
+  }
 
 
     </script>
 
-  <!--  <input type="button" value="first" onclick = 'switchToMainPage()'>
+   <!-- <input type="button" value="first" onclick = 'switchToMainPage()'>
     <input type="button" value="second" onclick = 'switchToContentsPage()'>
     <input type="button" value="third" onclick = 'switchToArticlePage()'>-->
 
