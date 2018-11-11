@@ -1,8 +1,17 @@
 function TAJAXStorage() {
   const self = this;
   const ajaxHandlerScript = 'http://fe.it-academy.by/AjaxStringStorage2.php';
+  const errorHandler = function (jqXHR, StatusStr, ErrorStr) {
+    alert(`${StatusStr} ${ErrorStr}`);
+  };
+  const updateReady = function (resultH) {
+    if (resultH.error != undefined) {
+      alert(resultH.error);
+    }
+  };
   let pHash;
   let updatePassword;
+
   $.ajax(
     {
       url: ajaxHandlerScript,
@@ -124,14 +133,4 @@ function TAJAXStorage() {
   self.getKeys = function () {
     return (Object.keys(pHash));
   };
-}
-
-function errorHandler(jqXHR, StatusStr, ErrorStr) {
-  alert(`${StatusStr} ${ErrorStr}`);
-}
-
-function updateReady(resultH) {
-  if (resultH.error != undefined) {
-    alert(resultH.error);
-  }
 }
