@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>SPA-homework</title>
+  </head>
+  <body>
+    <div id="page"></div>
+    <script>
+      function switchToMainPage() {
+        switchToState({page: 'main'});
+      }
+
+      function switchToContentsPage() {
+        switchToState({page: 'contents'});
+      }
+
+      function switchToArticlePage() {
+        switchToState({page: 'article'});
+      }
+
+      function switchToState(state) {
+        return location.hash = encodeURIComponent(JSON.stringify(state));
+      }
+
+      window.addEventListener('hashchange', renderNewState, false);
+
+      function renderNewState() {
+        let state = decodeURIComponent(location.hash.substr(1));
+
+        (state === '') ? (state = {page: 'main'}) : (state = JSON.parse(state));
+
+        let page= '';
+
+        switch (state.page) {
+          case 'main':
+            page += 'page 1';
+            break;
+          case 'contents':
+            page += 'page 2';
+            break;
+          case 'article':
+            page += 'page 3';
+            break;
+        }
+
+        const divEl = document.getElementById('page');
+        divEl.innerHTML = page;
+      }
+
+
+      renderNewState()
+
+
+
+
+
+    </script>
+
+  <!--  <input type="button" value="first" onclick = 'switchToMainPage()'>
+    <input type="button" value="second" onclick = 'switchToContentsPage()'>
+    <input type="button" value="third" onclick = 'switchToArticlePage()'>-->
+
+  </body>
+</html>
