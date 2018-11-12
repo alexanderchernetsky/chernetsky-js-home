@@ -37,8 +37,9 @@
       function switchToArticlePage(EO) {
         EO = EO || window.event;
         EO.preventDefault();
-        console.log('hi');
-        switchToState({page: 'article'});
+        if(EO.target.tagName === 'A'){
+          switchToState({page: 'article'});
+        }
       }
 
       function switchToState(state) {
@@ -102,32 +103,27 @@
         divEl.appendChild(br);
         divEl.appendChild(divContentEl);
 
-
         pElementsArray = document.querySelectorAll('p');
 
         refreshArticles();
-        addListeners();
+
+        document.addEventListener('click', switchToArticlePage, false)
       }
 
       function createArticlePage() {
-        divEl.innerHTML = '';
+        var htmlEl = document.getElementsByTagName('html')[0];
+        htmlEl.innerHTML = '';
+        $.ajax('articles/belarus.html',
+            {
+              type: 'GET',
+              dataType: 'html',
+              success: function (EO) {
+                htmlEl.innerHTML = EO;
+              },
+              error: errorHandler
+            })
       }
 
-
-
-      function addListeners () {
-        /*divContentEl.addEventListener('click', switchToArticlePage, false);*/
-        /*pElementsArray.forEach(function(elem) {
-          elem.addEventListener('click', switchToArticlePage, false);
-        });*/
-
-        divContentEl.addEventListener('click', function(EO){
-          console.log(EO.target);
-          if(EO.target.tagName == "a"){
-            console.log('BUTTON CLICKED');
-          }
-        });
-      }
       const AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
       var articlesArray;
       var pElementsArray;
