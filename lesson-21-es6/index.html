@@ -37,8 +37,8 @@
       function switchToArticlePage(EO) {
         EO = EO || window.event;
         EO.preventDefault();
-        if(EO.target.tagName === 'A'){
-          switchToState({page: 'article'});
+        if (EO.target.tagName === 'A') {
+          switchToState({page: 'article ' + EO.target.attributes[0].value + ''});
         }
       }
 
@@ -53,15 +53,16 @@
         
         (state === '') ? (state = {page: 'main'}) : (state = JSON.parse(state));
 
+        if (state.page.substr(0, 7) === 'article') {
+          createArticlePage();
+        }
+
         switch (state.page) {
           case 'main':
             createMainPage();
             break;
           case 'contents':
             createContentsPage();
-            break;
-          case 'article':
-            createArticlePage();
             break;
         }
       }
@@ -113,8 +114,14 @@
       function createArticlePage() {
         var htmlEl = document.getElementsByTagName('html')[0];
         htmlEl.innerHTML = '';
-        $.ajax('articles/belarus.html',
+        let state = JSON.parse(decodeURIComponent(location.hash.substr(1)));
+        let src = state.page.substr(8);
+        console.log(state);
+        console.log(src);
+        console.log(typeof src);
+        $.ajax(
             {
+              url: src + '.html',
               type: 'GET',
               dataType: 'html',
               success: function (EO) {
@@ -124,72 +131,70 @@
             })
       }
 
-      const AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
+      const ajaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
       var articlesArray;
       var pElementsArray;
+/*
+      var updatePassword;
 
-
-      /*
-      var UpdatePassword;
-
-      function SendMessage() {
-        UpdatePassword = Math.random();
+      function sendMessage() {
+        updatePassword = Math.random();
         $.ajax(
             {
-              url: AjaxHandlerScript,
+              url: ajaxHandlerScript,
               type: 'POST',
               data: {
                 f: 'LOCKGET',
                 n: 'CHERNETSKY_CONTENTS_ARTICLES',
-                p: UpdatePassword
+                p: updatePassword
               },
               cache: false,
-              success: LockGetReady,
-              error: ErrorHandler
+              success: lockGetReady,
+              error: errorHandler
             }
         );
       }
 
-      function LockGetReady(ResultH) {
-        if (ResultH.error !== undefined)
-          alert(ResultH.error);
+      function lockGetReady(resultH) {
+        if (resultH.error !== undefined)
+          alert(resultH.error);
         else {
-          MessagesA = [{name: 'африка'}, {name: 'аргентина'}, {name: 'беларусь'}, {name: 'венгрия'}, {name: 'германия'}, {name: 'польша'}, {name: 'голландия'}];
-          if (ResultH.result != "") {
-            MessagesA = [{name: 'африка'}, {name: 'аргентина'}, {name: 'беларусь'}, {name: 'венгрия'}, {name: 'германия'}, {name: 'польша'}, {name: 'голландия'}];
-            if (!MessagesA.length)
-              MessagesA = [];
+          articlesArray = [{name: 'африка', href: 'articles/africa'}, {name: 'аргентина', href: 'articles/argentina'}, {name: 'беларусь', href: 'articles/belarus'}, {name: 'венгрия', href: 'articles/hungary'}, {name: 'германия', href: 'articles/germany'}, {name: 'польша', href: 'articles/poland'}, {name: 'голландия', href: 'articles/holland'}];
+          if (resultH.result != "") {
+            articlesArray = [{name: 'африка', href: 'articles/africa'}, {name: 'аргентина', href: 'articles/argentina'}, {name: 'беларусь', href: 'articles/belarus'}, {name: 'венгрия', href: 'articles/hungary'}, {name: 'германия', href: 'articles/germany'}, {name: 'польша', href: 'articles/poland'}, {name: 'голландия', href: 'articles/holland'}];
+            if (!articlesArray.length)
+              articlesArray = [];
           }
 
           $.ajax(
               {
-                url: AjaxHandlerScript,
+                url: ajaxHandlerScript,
                 type: 'POST',
                 data: {
                   f: 'UPDATE',
                   n: 'CHERNETSKY_CONTENTS_ARTICLES',
-                  v: JSON.stringify(MessagesA),
-                  p: UpdatePassword
+                  v: JSON.stringify(articlesArray),
+                  p: updatePassword
                 },
                 cache: false,
-                success: UpdateReady,
-                error: ErrorHandler
+                success: updateReady,
+                error: errorHandler
               }
           );
         }
       }
 
-      function UpdateReady(ResultH) {
-        if (ResultH.error != undefined)
-          alert(ResultH.error);
+      function updateReady(resultH) {
+        if (resultH.error != undefined)
+          alert(resultH.error);
       }
 
-      SendMessage();*/
+      sendMessage();*/
 
       function refreshArticles() {
         $.ajax(
             {
-              url: AjaxHandlerScript,
+              url: ajaxHandlerScript,
               type: 'POST',
               data: {f: 'READ', n: 'CHERNETSKY_CONTENTS_ARTICLES'},
               cache: false,
@@ -220,19 +225,19 @@
           let article = articlesArray[i];
           switch (article.name.charAt(0)) {
             case 'а':
-              pElementsArray[0].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              pElementsArray[0].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
               break;
             case 'б':
-              pElementsArray[1].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              pElementsArray[1].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
               break;
             case 'в':
-              pElementsArray[2].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              pElementsArray[2].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
               break;
             case 'г':
-              pElementsArray[3].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              pElementsArray[3].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
               break;
             case 'п':
-              pElementsArray[4].insertAdjacentHTML('afterend', '<a href="">' + article.name + '</a>');
+              pElementsArray[4].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
               break;
           }
         }
