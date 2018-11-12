@@ -126,7 +126,6 @@ function TAJAXStorage() {
         );
       }
     }
-
     return delete pHash[key];
   };
 
