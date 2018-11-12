@@ -22,11 +22,11 @@
 
       const divEl = document.getElementById('page');
 
-      function switchToMainPage(EO) {
+      /*function switchToMainPage(EO) {
         EO = EO || window.event;
         EO.preventDefault();
         switchToState({page: 'main'});
-      }
+      }*/
 
       function switchToContentsPage(EO) {
         EO = EO || window.event;
@@ -116,9 +116,7 @@
         htmlEl.innerHTML = '';
         let state = JSON.parse(decodeURIComponent(location.hash.substr(1)));
         let src = state.page.substr(8);
-        console.log(state);
-        console.log(src);
-        console.log(typeof src);
+
         $.ajax(
             {
               url: src + '.html',
@@ -126,6 +124,13 @@
               dataType: 'html',
               success: function (EO) {
                 htmlEl.innerHTML = EO;
+                var sideBarContent;
+                document.body.insertAdjacentHTML('afterbegin', `<div id='sidebar' style="float: left; width: 100px; margin: 30px"></div>`);
+                const sideBarEl = document.getElementById('sidebar');
+                for (let i = 0; i < articlesArray.length; i++) {
+                  let article = articlesArray[i];
+                  sideBarEl.insertAdjacentHTML('afterbegin', '<a href="' + article.href + '">' + article.name + '</a><br>');
+                }
               },
               error: errorHandler
             })
