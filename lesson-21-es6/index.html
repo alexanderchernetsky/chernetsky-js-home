@@ -22,12 +22,6 @@
 
       const divEl = document.getElementById('page');
 
-      /*function switchToMainPage(EO) {
-        EO = EO || window.event;
-        EO.preventDefault();
-        switchToState({page: 'main'});
-      }*/
-
       function switchToContentsPage(EO) {
         EO = EO || window.event;
         EO.preventDefault();
@@ -108,12 +102,13 @@
 
         refreshArticles();
 
-        document.addEventListener('click', switchToArticlePage, false)
+        document.addEventListener('click', switchToArticlePage, false);
       }
 
       function createArticlePage() {
-        var htmlEl = document.getElementsByTagName('html')[0];
-        htmlEl.innerHTML = '';
+
+        divEl.innerHTML = '';
+
         let state = JSON.parse(decodeURIComponent(location.hash.substr(1)));
         let src = state.page.substr(8);
 
@@ -123,30 +118,41 @@
               type: 'GET',
               dataType: 'html',
               success: function (EO) {
-                htmlEl.innerHTML = EO;
-                var sideBarContent;
-                document.body.insertAdjacentHTML('afterbegin', `<div id='sidebar' style="float: left; width: 100px; margin: 30px"></div>`);
-                const sideBarEl = document.getElementById('sidebar');
-                for (let i = 0; i < articlesArray.length; i++) {
-                  let article = articlesArray[i];
-                  sideBarEl.insertAdjacentHTML('afterbegin', '<a href="' + article.href + '">' + article.name + '</a><br>');
+                divEl.innerHTML = EO;
+                divEl.insertAdjacentHTML('afterbegin', `<div id='sidebar' style="float: left; width: 100px; margin: 30px"></div>`);
+                sideBarEl = document.getElementById('sidebar');
+                if (!articlesArray) {
+                  refreshArticles();
+                } else {
+                  createSideBar();
                 }
               },
               error: errorHandler
             })
       }
 
-      const ajaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
       var articlesArray;
       var pElementsArray;
+      var sideBarEl;
+
+      function createSideBar() {
+        sideBarEl = document.getElementById('sidebar');
+        for (let i = 0; i < articlesArray.length; i++) {
+          let article = articlesArray[i];
+          sideBarEl.insertAdjacentHTML('afterbegin', '<a href="' + article.href + '">' + article.name + '</a><br>');
+        }
+      }
+
 /*
+      //the code below is necessary only for the first time to push array to the server
+
       var updatePassword;
 
       function sendMessage() {
         updatePassword = Math.random();
         $.ajax(
             {
-              url: ajaxHandlerScript,
+              url: "http://fe.it-academy.by/AjaxStringStorage2.php",
               type: 'POST',
               data: {
                 f: 'LOCKGET',
@@ -173,7 +179,7 @@
 
           $.ajax(
               {
-                url: ajaxHandlerScript,
+                url: "http://fe.it-academy.by/AjaxStringStorage2.php",
                 type: 'POST',
                 data: {
                   f: 'UPDATE',
@@ -199,7 +205,7 @@
       function refreshArticles() {
         $.ajax(
             {
-              url: ajaxHandlerScript,
+              url: "http://fe.it-academy.by/AjaxStringStorage2.php",
               type: 'POST',
               data: {f: 'READ', n: 'CHERNETSKY_CONTENTS_ARTICLES'},
               cache: false,
@@ -219,7 +225,12 @@
             if (!articlesArray.length)
               articlesArray = [];
           }
-          showArticles();
+          if (JSON.parse(decodeURIComponent(location.hash.substr(1))).page.substr(0, 7) !== 'article') {
+            showArticles();
+          } else {
+            document.addEventListener('click', switchToArticlePage, false);
+            createSideBar();
+          }
         }
       }
 
@@ -254,14 +265,6 @@
         alert(StatusStr + ' ' + ErrorStr);
       }
 
-
-
-
     </script>
-
-   <!-- <input type="button" value="first" onclick = 'switchToMainPage()'>
-    <input type="button" value="second" onclick = 'switchToContentsPage()'>
-    <input type="button" value="third" onclick = 'switchToArticlePage()'>-->
-
   </body>
 </html>
