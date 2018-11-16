@@ -9,7 +9,6 @@
         column-count: 3;
         column-gap: 10px;
       }
-
       div > a {
         display: block;
       }
@@ -18,9 +17,13 @@
   <body>
     <div id="page"></div>
     <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script>
 
+    <script>
       const divEl = document.getElementById('page');
+
+      let pElementsArray;
+      let articlesArray;
+      let sideBarEl;
 
       function switchToContentsPage(EO) {
         EO = EO || window.event;
@@ -32,7 +35,7 @@
         EO = EO || window.event;
         EO.preventDefault();
         if (EO.target.tagName === 'A') {
-          switchToState({page: 'article ' + EO.target.attributes[0].value + ''});
+          switchToState({page: 'article ' + EO.target.attributes[0].value});
         }
       }
 
@@ -78,7 +81,6 @@
         contentsLink.addEventListener('click', switchToContentsPage, false);
       }
 
-  
       function createContentsPage() {
         const header = document.createElement('b');
         header.innerHTML = 'Оглавление';
@@ -87,7 +89,7 @@
         const divContentEl = document.createElement('div');
         divContentEl.id = 'content';
         const letterArr = ['A', 'Б', 'В', 'Г', 'П'];
-        for (let z = 0; z < 5; z++) {
+        for (let z = 0; z < letterArr.length; z++) {
           let pEl = document.createElement('p');
           pEl.innerHTML = letterArr[z];
           divContentEl.appendChild(pEl);
@@ -131,15 +133,11 @@
             })
       }
 
-      var articlesArray;
-      var pElementsArray;
-      var sideBarEl;
-
       function createSideBar() {
         sideBarEl = document.getElementById('sidebar');
         for (let i = 0; i < articlesArray.length; i++) {
           let article = articlesArray[i];
-          sideBarEl.insertAdjacentHTML('afterbegin', '<a href="' + article.href + '">' + article.name + '</a><br>');
+          sideBarEl.insertAdjacentHTML('afterbegin', `<a href= ${article.href}>${article.name}</a><br>`);
         }
       }
 
@@ -234,37 +232,32 @@
         }
       }
 
-
-
       function showArticles() {
         for (let i = 0; i < articlesArray.length; i++) {
           let article = articlesArray[i];
           switch (article.name.charAt(0)) {
             case 'а':
-              pElementsArray[0].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
+              pElementsArray[0].insertAdjacentHTML('afterend', `<a href= ${article.href}>${article.name}</a>`);
               break;
             case 'б':
-              pElementsArray[1].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
+              pElementsArray[1].insertAdjacentHTML('afterend', `<a href= ${article.href}>${article.name}</a>`);
               break;
             case 'в':
-              pElementsArray[2].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
+              pElementsArray[2].insertAdjacentHTML('afterend', `<a href= ${article.href}>${article.name}</a>`);
               break;
             case 'г':
-              pElementsArray[3].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
+              pElementsArray[3].insertAdjacentHTML('afterend', `<a href= ${article.href}>${article.name}</a>`);
               break;
             case 'п':
-              pElementsArray[4].insertAdjacentHTML('afterend', '<a href="' + article.href + '">' + article.name + '</a>');
+              pElementsArray[4].insertAdjacentHTML('afterend', `<a href= ${article.href}>${article.name}</a>`);
               break;
           }
         }
       }
 
-
-
       function errorHandler(jqXHR, StatusStr, ErrorStr) {
         alert(StatusStr + ' ' + ErrorStr);
       }
-
     </script>
   </body>
 </html>
