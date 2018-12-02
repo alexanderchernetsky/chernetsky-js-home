@@ -1,0 +1,109 @@
+<!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Homework</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="manage-drinks">
+      <input type='button' value='Добавить напиток'>
+      <input type='button' value='Показать информацию о напитке'>
+      <input type='button' value='Удалить напиток'>
+      <input type='button' value='Показать меню напитков'>
+      <div id="message-drinks" class="info"></div>
+    </div>
+    <div class="manage-dishes">
+      <input type='button' value='Добавить блюдо'>
+      <input type='button' value='Показать информацию о блюде'>
+      <input type='button' value='Удалить блюдо'>
+      <input type='button' value='Показать меню блюд'>
+      <div id="message-dishes" class="info"></div>
+    </div>
+
+    <script src="localstorage.js"></script>
+    <script>
+      'use strict';
+
+      (function start() {
+        // drinks
+        var drinkStorage = new TLocalStorage('DRINKS');
+        var drinkInfoEl = document.getElementById('message-drinks');
+        var drinksInputArr = document.querySelectorAll('.manage-drinks input');
+        drinksInputArr[0].addEventListener('click', addStuff.bind(null, drinkStorage), false);
+        drinksInputArr[1].addEventListener('click', showStuffInfo.bind(null, drinkStorage, drinkInfoEl), false);
+        drinksInputArr[2].addEventListener('click', removeStuff.bind(null, drinkStorage, drinkInfoEl), false);
+        drinksInputArr[3].addEventListener('click', showAllStuff.bind(null, drinkStorage, drinkInfoEl), false);
+        drinkStorage.reset();
+        // dishes
+        var dishStorage = new TLocalStorage('DISHES');
+        var dishInfoEl = document.getElementById('message-dishes');
+        var dishesInputArr = document.querySelectorAll('.manage-dishes input');
+        dishesInputArr[0].addEventListener('click', addStuff.bind(null, dishStorage), false);
+        dishesInputArr[1].addEventListener('click', showStuffInfo.bind(null, dishStorage, dishInfoEl), false);
+        dishesInputArr[2].addEventListener('click', removeStuff.bind(null, dishStorage, dishInfoEl), false);
+        dishesInputArr[3].addEventListener('click', showAllStuff.bind(null, dishStorage, dishInfoEl), false);
+        dishStorage.reset();
+      }());
+
+      function addStuff(storage) {
+        var stuffName = prompt('Введите название', 'Test stuff').toLowerCase().trim();
+        var fHash = {};
+        if (stuffName) {
+          fHash.recipe = prompt('Введите рецепт приготовления', 'Test Recipe');
+          fHash.alcohol = confirm('Содержится ли алкоголь?') ? 'да' : 'нет';
+          return storage.addValue(stuffName, fHash);
+        } else {
+          alert('Ввод отменен!');
+        }
+      }
+
+      function showStuffInfo(storage, domElement) {
+        var stuffName = prompt('Введите название: ','').toLowerCase().trim();
+        var getStuffInfo = (stuffName) ? storage.getValue(stuffName) : 0;
+        var resultHTML = '';
+
+        if (getStuffInfo) {
+          var print1 = 'Название: ' + stuffName + '<br>';
+          var print2 = 'Содержание алкоголя: ' + getStuffInfo.alcohol + '<br>';
+          var print3 = 'Рецепт приготовления: ' + getStuffInfo.recipe + '<br>';
+
+          resultHTML = print1 + print2 + print3;
+        } else {
+          resultHTML = 'Ошибка! Нет такой иформации.';
+        }
+        domElement.innerHTML = resultHTML;
+      }
+
+      function removeStuff(storage, domElement) {
+        var stuffName = prompt('Что удалить?').toLowerCase().trim();
+        var delDrinkInfo = storage.deleteValue(stuffName);
+        var resultHTML = '';
+
+        if (delDrinkInfo) {
+          resultHTML = 'Информация о ' + stuffName + ' удалена';
+        } else {
+          resultHTML = 'Ошибка! Нет такой информации.';
+        }
+        domElement.innerHTML = resultHTML;
+      }
+
+      function showAllStuff(storage, domElement) {
+        var showStuffInfo = storage.getKeys();
+        var resultHTML = '';
+
+        if (showStuffInfo.length) {
+          for (var i = 0; i < showStuffInfo.length; i++) {
+            resultHTML += (i + 1) + '. ' + showStuffInfo[i] + '<br>';
+          }
+        } else {
+          resultHTML = 'Меню пустое, добавьте напитки.';
+        }
+        domElement.innerHTML = resultHTML;
+      }
+    </script>
+  </body>
+</html>
