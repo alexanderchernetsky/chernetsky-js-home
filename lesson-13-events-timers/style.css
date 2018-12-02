@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+}
+
+.clock-face {
+  background-color: lightgrey;
+  position: relative;
+}
+
+.hour-hand {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 2;
+  position: absolute;
+}
+
+.minute-hand {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  position: absolute;
+}
+
+.second-hand {
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 4;
+  position: absolute;
+}
+
+.circle {
+  background-color: lime;
+  position: absolute;
+}
+
+.number {
+  text-align: center;
+  color: black;
+}
+
+.rus-format-time {
+  position: absolute;
+}
